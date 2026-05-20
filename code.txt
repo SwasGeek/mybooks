@@ -1,388 +1,93 @@
-## Complete Step-by-Step Guide
-
----
-
-## PART 1: Final Folder Structure
+Welcome to the DevOps side of the house! If you are primarily a backend developer, thinking of this setup like **Java class inheritance** is the easiest mental model:
+ * **Cluster Config** is your Parent Class (defines global variables every service defaults to).
+ * **Train Config** is your Child Class (extends the parent and overrides specific methods/variables for that specific release train).
+ * **Spring Boot** naturally merges them at runtime, where the child (Train) overrides the parent (Cluster).
+Since we are using **Harness** and **OpenShift**, the setup spans three places: your **Spring Boot Code**, your **OpenShift Manifests (YAML files)**, and the **Harness UI**.
+Here is the exact step-by-step pipeline from start to finish.
+## Part 1: Your Backend Code (Spring Boot)
+You don't want your Java application to care *where* it is running; it should just look at a folder path and read whatever is there.
+### 1. Update your Application Configuration
+Open your project's src/main/resources/application.properties (or application.yml). Add this single line:
+```properties
+spring.config.import=optional:file:/config/cluster/application.properties,optional:file:/config/train/application.properties
 
 ```
-helm/
-  helm-common/
-    config/
-      common.yml          ← CREATE
-    templates/
-      configmap-common.yaml  ← CREATE
-    values.yaml           ← CREATE
-
-  helm-train1/
-    config/
-      dev1.yml            ← CREATE
-    templates/
-      configmap-env.yaml  ← CREATE
-      deployment.yaml     ← MODIFY
-    values.yaml           ← MODIFY
-    dev1-dubhe-values.yaml ← MODIFY
-
-src/main/resources/
-  application.properties  ← MODIFY
-
-Any Java class            ← MODIFY (add @Value)
-```
-
----
-
-## PART 2: Create helm-common Files
-
----
-
-### FILE 1: `helm/helm-common/config/common.yml`
-
+> **What this does:** When your jar runs in OpenShift, Spring will look into /config/cluster first. Then, it looks into /config/train. If a property (like database.url) exists in both, the one in /config/train **wins** and overrides the cluster one. The optional: prefix ensures your app won't crash when you run it locally on your machine without these folders.
+> 
+## Part 2: The Infrastructure Configs (OpenShift YAMLs)
+In your code repository (or wherever you store your Kubernetes deployment manifests for Harness), you need to define how OpenShift builds these files.
+### 2. Define the Train ConfigMap (configmap.yaml)
+Create a standard ConfigMap template. We will use a Harness placeholder (<+env.variables.train_properties>) so Harness can inject the correct properties depending on the train.
 ```yaml
-TEST_PROPERTY: hello from common
-```
-
----
-
-### FILE 2: `helm/helm-common/templates/configmap-common.yaml`
-
-```yaml
-{{- $commonConfigPath := .Values.commonConfigPath -}}
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: collateral-review-common-cm
-  namespace: {{ .Release.Namespace }}
+  name: backend-service-train-config
 data:
-  common.yml: |-
-    {{ .Files.Get $commonConfigPath | nindent 4 }}
+  application.properties: |
+    <+env.variables.train_properties>
+
 ```
-
----
-
-### FILE 3: `helm/helm-common/values.yaml`
-
-```yaml
-commonConfigPath: config/common.yml
-```
-
----
-
-## PART 3: Create/Update helm-train1 Files
-
----
-
-### FILE 4: `helm/helm-train1/config/dev1.yml`
-
-```yaml
-TEST_PROPERTY: hello from dev1
-```
-
----
-
-### FILE 5: `helm/helm-train1/templates/configmap-env.yaml`
-
-```yaml
-{{- if .Values.envConfigPath -}}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.APP_NAME }}-env-cm
-  namespace: {{ .Release.Namespace }}
-data:
-  env.yml: |-
-    {{ .Files.Get .Values.envConfigPath | nindent 4 }}
-{{- end }}
-```
-
-**Why the `if`?** This entire ConfigMap only gets created if `envConfigPath` is set. For dev2 it won't be created at all.
-
----
-
-### FILE 6: `helm/helm-train1/templates/deployment.yaml`
-
-Find your existing deployment.yaml and ADD the volume sections:
-
+### 3. Update your Deployment Manifest (deployment.yaml)
+Modify your Deployment YAML to tell OpenShift to create virtual folders inside your container and attach the ConfigMaps to them.
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.APP_NAME }}
-  namespace: {{ .Release.Namespace }}
+  name: my-backend-service
 spec:
-  replicas: {{ .Values.replicas }}
   template:
     spec:
       containers:
-        - name: {{ .Values.APP_NAME }}
-          image: ...
-
-          # ADD THIS BLOCK
+        - name: backend-container
+          image: <+artifact.image> # Harness placeholder for your Docker image
           volumeMounts:
-            - name: common-config
-              mountPath: /app/config/common.yml
-              subPath: common.yml
-
-            {{- if .Values.envConfigPath }}
-            - name: env-config
-              mountPath: /app/config/env.yml
-              subPath: env.yml
-            {{- end }}
-
-          # your existing env: section stays
-          env:
-            - name: PROFILE
-              value: {{ .Values.PROFILE }}
-            # ... rest of your env vars
-
-      # ADD THIS BLOCK (same level as containers)
+            # Mount the Global Cluster Config Map to the cluster folder
+            - name: cluster-config-volume
+              mountPath: /config/cluster
+            # Mount the Dynamic Train Config Map to the train folder
+            - name: train-config-volume
+              mountPath: /config/train
       volumes:
-        - name: common-config
+        # Link the folder names to the actual ConfigMap objects in OpenShift
+        - name: cluster-config-volume
           configMap:
-            name: collateral-review-common-cm
-
-        {{- if .Values.envConfigPath }}
-        - name: env-config
+            name: global-cluster-config # This map is already present in your OpenShift Cluster
+        - name: train-config-volume
           configMap:
-            name: {{ .Values.APP_NAME }}-env-cm
-        {{- end }}
+            name: backend-service-train-config # This map is generated by Harness above
+
 ```
-
----
-
-### FILE 7: `helm/helm-train1/values.yaml`
-
-ADD these lines to your existing values.yaml:
-
-```yaml
-# your existing values stay...
-APP_NAME: collateral-review-service
-PROFILE: dev
-REQUESTS_CPU: 100m
-# ... etc
-
-# ADD THESE at the bottom
-envConfigPath: ""
-```
-
----
-
-### FILE 8: `helm/helm-train1/dev1-dubhe-values.yaml`
-
-ADD this line to your existing file:
-
-```yaml
-# your existing values stay...
-PROFILE: dev
-REQUESTS_CPU: 100m
-# ... etc
-
-# ADD THIS at the bottom
-envConfigPath: config/dev1.yml
-```
-
----
-
-## PART 4: Update Spring Boot Files
-
----
-
-### FILE 9: `src/main/resources/application.properties`
-
-ADD this line:
-
+## Part 3: The Orchestration Layer (Harness UI)
+Now, we hook everything up inside Harness so it knows what data to inject into <+env.variables.train_properties>.
+### 4. Create your Environments in Harness
+ 1. Log into your Harness console and navigate to your **Project**.
+ 2. Go to **Environments** on the left menu.
+ 3. Create an environment for each of your trains (e.g., Train-Alpha, Train-Beta).
+### 5. Add the Train-Wise Configurations
+For **each** environment you just created, you need to add the environment variable that matches our YAML placeholder:
+ 1. Click into the **Train-Alpha** environment.
+ 2. Go to the **Variables** tab and click **+ Add Variable**.
+ 3. Set the name to train_properties and change the type to **Multi-Line Text**.
+ 4. In the value box, paste the configuration values specific to Train-Alpha:
+   ```properties
+   feature.new-ui-enabled=true
+   database.name=alpha_db_schema
+   
+   ```
+ 5. Save it, then repeat the exact same steps for **Train-Beta**, but change the values to match the Beta train:
 ```properties
-# your existing properties stay...
-
-# ADD THIS
-spring.config.import=\
-  optional:file:/app/config/common.yml,\
-  optional:file:/app/config/env.yml
-```
-
----
-
-### FILE 10: Any existing Java class
-
-```java
-import org.springframework.beans.factory.annotation.Value;
-import javax.annotation.PostConstruct;
-
-@Service
-public class AnyExistingClass {
-
-    // ADD THESE
-    @Value("${TEST_PROPERTY:NOT-FOUND}")
-    private String testProperty;
-
-    @PostConstruct
-    public void init() {
-        System.out.println("================================");
-        System.out.println("TEST_PROPERTY = " + testProperty);
-        System.out.println("================================");
-    }
-}
-```
-
----
-
-## PART 5: Deploy
-
----
-
-### DEPLOY 1: Deploy common first (only once)
-
-```bash
-helm upgrade --install collateral-common \
-  ./helm/helm-common \
-  -f ./helm/helm-common/values.yaml \
-  -n <your-namespace>
-```
-
----
-
-### DEPLOY 2: Deploy to dev2 (no override)
-
-```bash
-helm upgrade --install collateral-train1 \
-  ./helm/helm-train1 \
-  -f ./helm/helm-train1/values.yaml \
-  -n dev2-namespace
-```
-
----
-
-### DEPLOY 3: Deploy to dev1 (with override)
-
-```bash
-helm upgrade --install collateral-train1 \
-  ./helm/helm-train1 \
-  -f ./helm/helm-train1/values.yaml \
-  -f ./helm/helm-train1/dev1-dubhe-values.yaml \
-  -n dev1-namespace
-```
-
----
-
-## PART 6: Verify
-
----
-
-### Check on dev2
-
-```bash
-# 1. Check common configmap exists
-kubectl get configmap -n dev2-namespace
-# Should see: collateral-review-common-cm
-
-# 2. See its content
-kubectl describe configmap collateral-review-common-cm -n dev2-namespace
-# Should show: TEST_PROPERTY: hello from common
-
-# 3. Check NO env configmap (should not exist for dev2)
-kubectl get configmap collateral-review-service-env-cm -n dev2-namespace
-# Should say: not found ✅
-
-# 4. Check app logs
-kubectl logs <pod-name> -n dev2-namespace
-# Should print: TEST_PROPERTY = hello from common ✅
-```
-
----
-
-### Check on dev1
-
-```bash
-# 1. Check both configmaps exist
-kubectl get configmap -n dev1-namespace
-# Should see BOTH:
-# collateral-review-common-cm
-# collateral-review-service-env-cm
-
-# 2. See env configmap content
-kubectl describe configmap collateral-review-service-env-cm -n dev1-namespace
-# Should show: TEST_PROPERTY: hello from dev1
-
-# 3. Check files mounted in pod
-kubectl exec -it <pod-name> -n dev1-namespace \
-  -- cat /app/config/common.yml
-# Should show: TEST_PROPERTY: hello from common
-
-kubectl exec -it <pod-name> -n dev1-namespace \
-  -- cat /app/config/env.yml
-# Should show: TEST_PROPERTY: hello from dev1
-
-# 4. Check app logs
-kubectl logs <pod-name> -n dev1-namespace
-# Should print: TEST_PROPERTY = hello from dev1 ✅
-```
-
----
-
-## PART 7: Full Flow Summary
+   feature.new-ui-enabled=false
+   database.name=beta_db_schema
 
 ```
-YOU RUN helm install
-        │
-        ▼
-┌───────────────────────────────┐
-│ Helm reads yml files          │
-│ Fills in template variables   │
-│ Creates K8s objects           │
-└───────────┬───────────────────┘
-            │
-            ▼
-┌───────────────────────────────┐
-│ ConfigMap created in cluster  │
-│ common-cm: common.yml content │
-│ env-cm: env.yml content       │
-│ (env-cm only exists in dev1)  │
-└───────────┬───────────────────┘
-            │
-            ▼
-┌───────────────────────────────┐
-│ Pod starts                    │
-│ K8s mounts ConfigMap          │
-│ as real files inside pod:     │
-│ /app/config/common.yml        │
-│ /app/config/env.yml (dev1)    │
-└───────────┬───────────────────┘
-            │
-            ▼
-┌───────────────────────────────┐
-│ Spring Boot starts            │
-│ Reads application.properties  │
-│ Sees spring.config.import     │
-│ Loads common.yml first        │
-│ Loads env.yml second          │
-│ (env overrides common)        │
-└───────────┬───────────────────┘
-            │
-            ▼
-┌───────────────────────────────┐
-│ @Value("${TEST_PROPERTY}")    │
-│ Spring looks up in memory     │
-│                               │
-│ dev2 → hello from common  ✅  │
-│ dev1 → hello from dev1    ✅  │
-└───────────────────────────────┘
+## How It All Works at Runtime (The Big Picture)
+ 1. **You trigger a deployment** in Harness targeting the Train-Alpha environment.
+ 2. **Harness reads your files:** It takes your configmap.yaml, looks at <+env.variables.train_properties>, pulls the specific text block you saved inside the Train-Alpha settings, and renders a complete manifest.
+ 3. **Harness pushes to OpenShift:** It runs oc apply behind the scenes to update the resources in your OpenShift namespace.
+ 4. **OpenShift spins up the Pod:** OpenShift looks at the deployment.yaml, creates two virtual folders inside your container (/config/cluster and /config/train), and fills them with the respective file content.
+ 5. **Spring Boot boots up:** Your Java app starts, sees the spring.config.import rule, reads the global properties from the cluster, overlays the custom properties from the train, and fully configures your Application Context seamlessly!
+Does this structure make sense from a backend point of view, or would you like to dive deeper into how OpenShift mounts these files as volumes?
 ```
 
----
-
-## Quick Checklist
-
-```
-□ helm-common/config/common.yml created
-□ helm-common/templates/configmap-common.yaml created
-□ helm-common/values.yaml created
-□ helm-train1/config/dev1.yml created
-□ helm-train1/templates/configmap-env.yaml created
-□ helm-train1/templates/deployment.yaml updated
-□ helm-train1/values.yaml updated (envConfigPath: "")
-□ helm-train1/dev1-dubhe-values.yaml updated
-□ application.properties updated
-□ Java class updated with @Value
-□ helm-common deployed
-□ helm-train1 deployed to dev2
-□ helm-train1 deployed to dev1
 ```
