@@ -93,3 +93,58 @@ public class ConfigTestLogger {
  2. Helm processes templates/configmap.yaml, loops over your train_properties section, and builds a ConfigMap named collateral-review-service-train-config containing your test property text.
  3. OpenShift starts the pod, catches the volumeMounts configuration, and mounts the config file directly onto /config/train/application.properties.
  4. Spring Boot reads the file location dynamically at boot, maps it, and your ConfigTestLogger prints **Hello from Dubhe Train 1!** straight to your OpenShift application logs!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Switching to application.yml actually makes this setup even cleaner! Since Helm natively speaks YAML, we can use a built-in Helm function to automatically format your properties perfectly, allowing you to use nested YAML configurations.
+Here are the exactly 3 small adjustments you need to make to your previous changes.
+## Change 1: Update templates/configmap.yaml
+Instead of looping through properties manually, we will change the filename to application.yml and use Helm's native toYaml function. This takes whatever is in your values file and converts it into perfectly indented YAML inside the ConfigMap.
+Replace the contents of your configmap.yaml with this:
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.APP_NAME }}-train-config
+data:
+  application.yml: |
+{{- toYaml .Values.train_properties | nindent 4 }}
+
+```
+*(Note: The nindent 4 is important—it ensures the generated YAML is indented correctly under the application.yml: | block so OpenShift can parse it).*
+## Change 2: Update dev1-dubhe-values.yaml
+Because we are using toYaml now, you can define your test property in standard, nested YAML format (just like you would in Spring Boot), or keep it flat.
+At the bottom of dev1-dubhe-values.yaml, define it like this:
+```yaml
+train_properties:
+  my:
+    test:
+      train:
+        property: "Hello from Dubhe Train 1 (YAML)!"
+
+```
+## Change 3: Update Spring Boot's application.yml
+Inside your Java project (src/main/resources/application.yml), the spring.config.import syntax looks a bit different in YAML, and we need to change the file extensions it looks for from .properties to .yml.
+Add this to your base application.yml:
+```yaml
+spring:
+  config:
+    import: "optional:file:/config/cluster/application.yml,optional:file:/config/train/application.yml"
+
+```
+*(Note: If your global cluster configmap is still generating a .properties file, just change the first path to /config/cluster/application.properties. Spring Boot is smart enough to read both at the same time!)*
+That is it. Your Java @Value("${my.test.train.property}") annotation will work exactly the same, and your deployment.yaml volume mounts remain completely unchanged because they only mount the *folder*, not the specific file.
