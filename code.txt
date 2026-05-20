@@ -1,0 +1,388 @@
+## Complete Step-by-Step Guide
+
+---
+
+## PART 1: Final Folder Structure
+
+```
+helm/
+  helm-common/
+    config/
+      common.yml          ← CREATE
+    templates/
+      configmap-common.yaml  ← CREATE
+    values.yaml           ← CREATE
+
+  helm-train1/
+    config/
+      dev1.yml            ← CREATE
+    templates/
+      configmap-env.yaml  ← CREATE
+      deployment.yaml     ← MODIFY
+    values.yaml           ← MODIFY
+    dev1-dubhe-values.yaml ← MODIFY
+
+src/main/resources/
+  application.properties  ← MODIFY
+
+Any Java class            ← MODIFY (add @Value)
+```
+
+---
+
+## PART 2: Create helm-common Files
+
+---
+
+### FILE 1: `helm/helm-common/config/common.yml`
+
+```yaml
+TEST_PROPERTY: hello from common
+```
+
+---
+
+### FILE 2: `helm/helm-common/templates/configmap-common.yaml`
+
+```yaml
+{{- $commonConfigPath := .Values.commonConfigPath -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: collateral-review-common-cm
+  namespace: {{ .Release.Namespace }}
+data:
+  common.yml: |-
+    {{ .Files.Get $commonConfigPath | nindent 4 }}
+```
+
+---
+
+### FILE 3: `helm/helm-common/values.yaml`
+
+```yaml
+commonConfigPath: config/common.yml
+```
+
+---
+
+## PART 3: Create/Update helm-train1 Files
+
+---
+
+### FILE 4: `helm/helm-train1/config/dev1.yml`
+
+```yaml
+TEST_PROPERTY: hello from dev1
+```
+
+---
+
+### FILE 5: `helm/helm-train1/templates/configmap-env.yaml`
+
+```yaml
+{{- if .Values.envConfigPath -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.APP_NAME }}-env-cm
+  namespace: {{ .Release.Namespace }}
+data:
+  env.yml: |-
+    {{ .Files.Get .Values.envConfigPath | nindent 4 }}
+{{- end }}
+```
+
+**Why the `if`?** This entire ConfigMap only gets created if `envConfigPath` is set. For dev2 it won't be created at all.
+
+---
+
+### FILE 6: `helm/helm-train1/templates/deployment.yaml`
+
+Find your existing deployment.yaml and ADD the volume sections:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.APP_NAME }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  template:
+    spec:
+      containers:
+        - name: {{ .Values.APP_NAME }}
+          image: ...
+
+          # ADD THIS BLOCK
+          volumeMounts:
+            - name: common-config
+              mountPath: /app/config/common.yml
+              subPath: common.yml
+
+            {{- if .Values.envConfigPath }}
+            - name: env-config
+              mountPath: /app/config/env.yml
+              subPath: env.yml
+            {{- end }}
+
+          # your existing env: section stays
+          env:
+            - name: PROFILE
+              value: {{ .Values.PROFILE }}
+            # ... rest of your env vars
+
+      # ADD THIS BLOCK (same level as containers)
+      volumes:
+        - name: common-config
+          configMap:
+            name: collateral-review-common-cm
+
+        {{- if .Values.envConfigPath }}
+        - name: env-config
+          configMap:
+            name: {{ .Values.APP_NAME }}-env-cm
+        {{- end }}
+```
+
+---
+
+### FILE 7: `helm/helm-train1/values.yaml`
+
+ADD these lines to your existing values.yaml:
+
+```yaml
+# your existing values stay...
+APP_NAME: collateral-review-service
+PROFILE: dev
+REQUESTS_CPU: 100m
+# ... etc
+
+# ADD THESE at the bottom
+envConfigPath: ""
+```
+
+---
+
+### FILE 8: `helm/helm-train1/dev1-dubhe-values.yaml`
+
+ADD this line to your existing file:
+
+```yaml
+# your existing values stay...
+PROFILE: dev
+REQUESTS_CPU: 100m
+# ... etc
+
+# ADD THIS at the bottom
+envConfigPath: config/dev1.yml
+```
+
+---
+
+## PART 4: Update Spring Boot Files
+
+---
+
+### FILE 9: `src/main/resources/application.properties`
+
+ADD this line:
+
+```properties
+# your existing properties stay...
+
+# ADD THIS
+spring.config.import=\
+  optional:file:/app/config/common.yml,\
+  optional:file:/app/config/env.yml
+```
+
+---
+
+### FILE 10: Any existing Java class
+
+```java
+import org.springframework.beans.factory.annotation.Value;
+import javax.annotation.PostConstruct;
+
+@Service
+public class AnyExistingClass {
+
+    // ADD THESE
+    @Value("${TEST_PROPERTY:NOT-FOUND}")
+    private String testProperty;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("================================");
+        System.out.println("TEST_PROPERTY = " + testProperty);
+        System.out.println("================================");
+    }
+}
+```
+
+---
+
+## PART 5: Deploy
+
+---
+
+### DEPLOY 1: Deploy common first (only once)
+
+```bash
+helm upgrade --install collateral-common \
+  ./helm/helm-common \
+  -f ./helm/helm-common/values.yaml \
+  -n <your-namespace>
+```
+
+---
+
+### DEPLOY 2: Deploy to dev2 (no override)
+
+```bash
+helm upgrade --install collateral-train1 \
+  ./helm/helm-train1 \
+  -f ./helm/helm-train1/values.yaml \
+  -n dev2-namespace
+```
+
+---
+
+### DEPLOY 3: Deploy to dev1 (with override)
+
+```bash
+helm upgrade --install collateral-train1 \
+  ./helm/helm-train1 \
+  -f ./helm/helm-train1/values.yaml \
+  -f ./helm/helm-train1/dev1-dubhe-values.yaml \
+  -n dev1-namespace
+```
+
+---
+
+## PART 6: Verify
+
+---
+
+### Check on dev2
+
+```bash
+# 1. Check common configmap exists
+kubectl get configmap -n dev2-namespace
+# Should see: collateral-review-common-cm
+
+# 2. See its content
+kubectl describe configmap collateral-review-common-cm -n dev2-namespace
+# Should show: TEST_PROPERTY: hello from common
+
+# 3. Check NO env configmap (should not exist for dev2)
+kubectl get configmap collateral-review-service-env-cm -n dev2-namespace
+# Should say: not found ✅
+
+# 4. Check app logs
+kubectl logs <pod-name> -n dev2-namespace
+# Should print: TEST_PROPERTY = hello from common ✅
+```
+
+---
+
+### Check on dev1
+
+```bash
+# 1. Check both configmaps exist
+kubectl get configmap -n dev1-namespace
+# Should see BOTH:
+# collateral-review-common-cm
+# collateral-review-service-env-cm
+
+# 2. See env configmap content
+kubectl describe configmap collateral-review-service-env-cm -n dev1-namespace
+# Should show: TEST_PROPERTY: hello from dev1
+
+# 3. Check files mounted in pod
+kubectl exec -it <pod-name> -n dev1-namespace \
+  -- cat /app/config/common.yml
+# Should show: TEST_PROPERTY: hello from common
+
+kubectl exec -it <pod-name> -n dev1-namespace \
+  -- cat /app/config/env.yml
+# Should show: TEST_PROPERTY: hello from dev1
+
+# 4. Check app logs
+kubectl logs <pod-name> -n dev1-namespace
+# Should print: TEST_PROPERTY = hello from dev1 ✅
+```
+
+---
+
+## PART 7: Full Flow Summary
+
+```
+YOU RUN helm install
+        │
+        ▼
+┌───────────────────────────────┐
+│ Helm reads yml files          │
+│ Fills in template variables   │
+│ Creates K8s objects           │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ ConfigMap created in cluster  │
+│ common-cm: common.yml content │
+│ env-cm: env.yml content       │
+│ (env-cm only exists in dev1)  │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ Pod starts                    │
+│ K8s mounts ConfigMap          │
+│ as real files inside pod:     │
+│ /app/config/common.yml        │
+│ /app/config/env.yml (dev1)    │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ Spring Boot starts            │
+│ Reads application.properties  │
+│ Sees spring.config.import     │
+│ Loads common.yml first        │
+│ Loads env.yml second          │
+│ (env overrides common)        │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ @Value("${TEST_PROPERTY}")    │
+│ Spring looks up in memory     │
+│                               │
+│ dev2 → hello from common  ✅  │
+│ dev1 → hello from dev1    ✅  │
+└───────────────────────────────┘
+```
+
+---
+
+## Quick Checklist
+
+```
+□ helm-common/config/common.yml created
+□ helm-common/templates/configmap-common.yaml created
+□ helm-common/values.yaml created
+□ helm-train1/config/dev1.yml created
+□ helm-train1/templates/configmap-env.yaml created
+□ helm-train1/templates/deployment.yaml updated
+□ helm-train1/values.yaml updated (envConfigPath: "")
+□ helm-train1/dev1-dubhe-values.yaml updated
+□ application.properties updated
+□ Java class updated with @Value
+□ helm-common deployed
+□ helm-train1 deployed to dev2
+□ helm-train1 deployed to dev1
+```
