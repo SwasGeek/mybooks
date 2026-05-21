@@ -1,0 +1,20 @@
+# ============================================================
+# ADDITION 1: Add this inside your container spec (same level as env:, resources:)
+# ============================================================
+        volumeMounts:
+          - name: {{ .Values.APP_NAME }}-app-volume
+            mountPath: /etc/config
+
+# ============================================================
+# ADDITION 2: Add this env var inside your existing env: block
+# ============================================================
+          - name: SPRING_CONFIG_ADDITIONAL_LOCATION
+            value: "file:/etc/config/"
+
+# ============================================================
+# ADDITION 3: Add this at pod spec level (same level as containers:)
+# ============================================================
+      volumes:
+        - name: {{ .Values.APP_NAME }}-app-volume
+          configMap:
+            name: {{ .Values.APP_NAME }}-cm

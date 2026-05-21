@@ -1,0 +1,4 @@
+# Dev env config (env-specific)
+# TODO: Replace test property with real application-dev.yml content
+test:
+  env-property: hello-from-dev-configmap

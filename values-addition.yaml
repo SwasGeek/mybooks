@@ -1,0 +1,3 @@
+# ADD THIS to your existing values.yaml
+# Path to the base application.yml inside helm chart (non-env-specific)
+CCSConfigPath: "config/application.yml"

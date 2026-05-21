@@ -1,0 +1,6 @@
+# ADD THIS to your dev1-dubhe-values.yaml (and similarly for sit1, uat1, cob, prod values files)
+configPath: config/application-dev.yml
+# sit1-sirius-values.yaml  → configPath: config/application-sit.yml
+# uat1-ursa-values.yaml    → configPath: config/application-uat.yml
+# cob-values.yaml          → configPath: config/application-cob.yml
+# prod-values.yaml         → configPath: config/application-prod.yml

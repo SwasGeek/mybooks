@@ -1,0 +1,27 @@
+ 
+I have everything I need. Let me note the key differences from the reference:
+- Your files are **`.yml`** not `.properties`
+- Your values use **`APP_NAME`** not `appName`
+- You have **no `config/` folder** yet in helm
+- No vault section needed
+
+Let me produce all files now with just a test property:
+
+Here's exactly what to do:
+
+**Step 1 — Create `helm/helm-train1/config/` folder** and place inside it:
+- `application.yml` (the base config file)
+- `application-dev.yml` (dev env config)
+
+**Step 2 — Add `configmap.yaml`** to `helm/helm-train1/templates/`
+
+**Step 3 — Add to `values.yaml`:** the `CCSConfigPath` line
+
+**Step 4 — Add to `dev1-dubhe-values.yaml`:** the `configPath` line
+
+**Step 5 — In `deployment.yaml`** add the 3 snippets from `deployment-additions.yaml`:
+- `volumeMounts` inside the container
+- `SPRING_CONFIG_ADDITIONAL_LOCATION` env var (this is critical — tells Spring Boot to look at `/etc/config/`)
+- `volumes` at pod spec level (same indentation as `containers:`)
+
+Once you deploy and test, verify by hitting your actuator endpoint or logging `${test.property}` somewhere. If it prints `hello-from-configmap-base`, the plumbing works and you can replace the test content with your real properties!

@@ -1,0 +1,11 @@
+{{- $ConfigPath := .Values.CCSConfigPath -}}
+{{- $EnvConfigPath := .Values.configPath -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.APP_NAME }}-cm
+  namespace: {{ .Release.Namespace }}
+data:
+  application.yml: |-
+    {{ .Files.Get $ConfigPath | nindent 4 }}
+    {{ .Files.Get $EnvConfigPath | nindent 4 }}

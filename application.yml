@@ -1,0 +1,4 @@
+# Base config (non-env-specific)
+# TODO: Replace test property with real base application.yml content
+test:
+  property: hello-from-configmap-base
