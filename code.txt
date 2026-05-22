@@ -1,150 +1,92 @@
-This is absolutely perfect. Seeing your actual deployment.yaml, global values.yaml, and environment-specific dev1-dubhe-values.yaml gives us exactly what we need to execute this cleanly.
-Let's configure a test property named **my.test.train.property** and set its value to "Hello from Dubhe Train 1!" so you can verify it logs successfully out of your Train-level ConfigMap.
-Here are the 4 simple modifications you need to make across your files.
-## Step 1: Create a New File templates/configmap.yaml
-Inside your templates directory (right next to your deployment.yaml), create a brand new file named configmap.yaml.
-This file uses a Helm loop to take whatever properties you define under a train_properties section in your values files and inject them into an application.properties file:
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.APP_NAME }}-train-config
-data:
-  application.properties: |
-    {{- range $key, $value := .Values.train_properties }}
-    {{ $key }}={{ $value }}
-    {{- end }}
+Here is the complete, start-to-finish guide to migrating your application configuration to a Helm-managed ConfigMap. This covers moving your actual .yml files, merging them correctly, and injecting them into your Spring Boot container.
+### Phase 1: Relocate Your Configuration Files
+To manage your configuration through Helm, the files must live inside the Helm chart directory, not inside your application's source code.
+ 1. Create a new directory named config inside your Helm chart folder: **helm/helm-train1/config/**
+ 2. Move all your environment configuration files out of src/main/resources/ and into this new config directory.
+ 3. Your Helm directory should now look like this:
+   ```text
+   helm/helm-train1/
+   ├── config/
+   │   ├── application.yml
+   │   ├── application-dev.yml
+   │   ├── application-cob.yml
+   │   └── ... (other env files)
+   
+   ```
+*(Note: Removing them from src/main/resources/ ensures they aren't permanently baked into your .jar file, making Helm your single source of truth).*
+### Phase 2: Define Configuration Paths in Values
+Helm needs to know which files to combine depending on the environment being deployed.
+ 1. **Open helm/helm-train1/values.yaml** (Your base values file).
+   Add the default paths at the top or bottom of the file:
+   ```yaml
+   # Base configuration applied to all environments
+   baseConfigPath: "config/application.yml"
+   
+   # Default environment configuration (acts as a fallback)
+   envConfigPath: "config/application.yml" 
+   
+   ```
+ 2. **Open helm/helm-train1/dev1-dubhe-values.yaml** (Your Dev environment values file).
+   Override the envConfigPath to point to the dev-specific properties:
+   ```yaml
+   # Overrides the fallback to use Dev properties
+   envConfigPath: "config/application-dev.yml"
+   
+   ```
+*(Repeat step 2 for your other environment value files, pointing to -cob.yml, -sit.yml, etc.)*
+### Phase 3: Build the ConfigMap Template
+Since you are using .yml files instead of flat .properties files, we must join them using the standard YAML multi-document separator (---). Spring Boot will read this as a single file and apply the environment overrides perfectly.
+ 1. Create a new file: **helm/helm-train1/templates/configmap.yaml**
+ 2. Paste in the following code:
+   ```yaml
+   {{- $BaseConfigPath := .Values.baseConfigPath -}}
+   {{- $EnvConfigPath := .Values.envConfigPath -}}
+   
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: {{ .Values.APP_NAME }}-cm
+     namespace: {{ .Release.Namespace }}
+   data:
+     application.yml: |-
+   {{ .Files.Get $BaseConfigPath | nindent 4 }}
+       ---
+   {{ .Files.Get $EnvConfigPath | nindent 4 }}
+   
+   ```
+### Phase 4: Inject the ConfigMap into Your Deployment
+Now we mount that ConfigMap directly into the container's file system so Spring Boot can read it on startup.
+ 1. **Open helm/helm-train1/templates/deployment.yaml**.
+ 2. Find your containers: block. Add the SPRING_CONFIG_ADDITIONAL_LOCATION environment variable and the volumeMounts:
+   ```yaml
+         containers:
+           - name: lds-integrating-service
+             image: ...
+             env:
+               # Forces Spring Boot to look in /etc/config/ for properties
+               - name: SPRING_CONFIG_ADDITIONAL_LOCATION
+                 value: "file:/etc/config/"
+               # ... (keep your other existing env vars here) ...
+   
+             volumeMounts:
+               - name: {{ .Values.APP_NAME }}-app-volume
+                 mountPath: /etc/config
+   
+   ```
+ 3. Scroll down to the bottom of the template.spec (at the same indentation level as containers:) and define the volume:
+   ```yaml
+         volumes:
+           - name: {{ .Values.APP_NAME }}-app-volume
+             configMap:
+               name: {{ .Values.APP_NAME }}-cm
+   
+   ```
+### Phase 5: Deploy and Verify
+You are now ready to deploy. When Helm packages this release, it will dynamically fetch application.yml and application-dev.yml, stitch them together, and hand them to the pod.
+**To verify it worked:**
+Once your pod is running, execute into it to check the mounted file:
+```bash
+kubectl exec -it <your-pod-name> -n <your-namespace> -- cat /etc/config/application.yml
 
 ```
-## Step 2: Add the Test Property to your Environment Values File
-Now, let's open **dev1-dubhe-values.yaml**. Go to the very bottom of the file (line 30) and add a new section for your train properties along with your test key:
-```yaml
-# Add this at the bottom of dev1-dubhe-values.yaml
-train_properties:
-  my.test.train.property: "Hello from Dubhe Train 1!"
-  # You can add more dev-specific properties here later!
-  # database.schema: "dev_schema"
-
-```
-## Step 3: Mount the Folders inside templates/deployment.yaml
-Open your templates/deployment.yaml file. We need to add volumeMounts under your container block and the corresponding volumes definitions at the bottom of the pod specification.
-Look at line 22 where it says containers:. Modify that entire lower block so it matches this:
-```yaml
-      containers:
-        - name: collateral-review-service
-          image: {{ .Values.lsImageBase }} # Just showing context around line 23
-          env:
-            - name: APP_NAME
-              value: {{ .Values.APP_NAME }}
-            # ... keep your other env variables as they are ...
-          volumeMounts:
-            # Mount 1: Cluster-level ConfigMap (already exists in your OpenShift namespace)
-            - name: cluster-config-volume
-              mountPath: /config/cluster
-            # Mount 2: The Train ConfigMap we created in Step 1
-            - name: train-config-volume
-              mountPath: /config/train
-      volumes:
-        - name: cluster-config-volume
-          configMap:
-            # Make sure this matches the exact name of the global cluster configmap in your OpenShift namespace
-            name: global-cluster-config 
-        - name: train-config-volume
-          configMap:
-            name: {{ .Values.APP_NAME }}-train-config
-
-```
-## Step 4: Access and Log the Property in Spring Boot
-Now back to your comfortable Java territory!
-### 1. Update application.properties or application.yml
-Inside your Java project source folder (src/main/resources/application.properties), add this line to tell Spring Boot to scan our two newly mounted paths:
-```properties
-spring.config.import=optional:file:/config/cluster/application.properties,optional:file:/config/train/application.properties
-
-```
-### 2. Log it from a Component
-You can now use standard Spring @Value injection to read your test property. Add a quick @PostConstruct block inside any Spring Component or Controller (like your CollateralReviewController.java visible in your IDE tabs) to print it right at startup:
-```java
-import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-@Component
-public class ConfigTestLogger {
-
-    private static final Logger log = LoggerFactory.getLogger(ConfigTestLogger.class);
-
-    @Value("${my.test.train.property:Property not found!}")
-    private String testProperty;
-
-    @PostConstruct
-    public void init() {
-        log.info("=================================================");
-        log.info("TRAIN CONFIG TEST VALUE: {}", testProperty);
-        log.info("=================================================");
-    }
-}
-
-```
-## What Happens When You Deploy via Harness?
- 1. Harness kicks off the deployment using helm-train1 and passes dev1-dubhe-values.yaml as the values file source.
- 2. Helm processes templates/configmap.yaml, loops over your train_properties section, and builds a ConfigMap named collateral-review-service-train-config containing your test property text.
- 3. OpenShift starts the pod, catches the volumeMounts configuration, and mounts the config file directly onto /config/train/application.properties.
- 4. Spring Boot reads the file location dynamically at boot, maps it, and your ConfigTestLogger prints **Hello from Dubhe Train 1!** straight to your OpenShift application logs!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Switching to application.yml actually makes this setup even cleaner! Since Helm natively speaks YAML, we can use a built-in Helm function to automatically format your properties perfectly, allowing you to use nested YAML configurations.
-Here are the exactly 3 small adjustments you need to make to your previous changes.
-## Change 1: Update templates/configmap.yaml
-Instead of looping through properties manually, we will change the filename to application.yml and use Helm's native toYaml function. This takes whatever is in your values file and converts it into perfectly indented YAML inside the ConfigMap.
-Replace the contents of your configmap.yaml with this:
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.APP_NAME }}-train-config
-data:
-  application.yml: |
-{{- toYaml .Values.train_properties | nindent 4 }}
-
-```
-*(Note: The nindent 4 is important—it ensures the generated YAML is indented correctly under the application.yml: | block so OpenShift can parse it).*
-## Change 2: Update dev1-dubhe-values.yaml
-Because we are using toYaml now, you can define your test property in standard, nested YAML format (just like you would in Spring Boot), or keep it flat.
-At the bottom of dev1-dubhe-values.yaml, define it like this:
-```yaml
-train_properties:
-  my:
-    test:
-      train:
-        property: "Hello from Dubhe Train 1 (YAML)!"
-
-```
-## Change 3: Update Spring Boot's application.yml
-Inside your Java project (src/main/resources/application.yml), the spring.config.import syntax looks a bit different in YAML, and we need to change the file extensions it looks for from .properties to .yml.
-Add this to your base application.yml:
-```yaml
-spring:
-  config:
-    import: "optional:file:/config/cluster/application.yml,optional:file:/config/train/application.yml"
-
-```
-*(Note: If your global cluster configmap is still generating a .properties file, just change the first path to /config/cluster/application.properties. Spring Boot is smart enough to read both at the same time!)*
-That is it. Your Java @Value("${my.test.train.property}") annotation will work exactly the same, and your deployment.yaml volume mounts remain completely unchanged because they only mount the *folder*, not the specific file.
+You should see the contents of your base application.yml, followed by ---, followed by your environment-specific application-dev.yml. Spring Boot will automatically prioritize the properties below the --- separator.
