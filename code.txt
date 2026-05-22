@@ -1,62 +1,329 @@
-To absolutely guarantee that Spring Boot is actively reading from your newly mounted ConfigMap (and not just falling back to some default properties), you have a few ways to test it.
+Good idea. Don’t directly migrate everything first.
 
-Here are the three best methods, ranging from a quick no-code test to a foolproof code-based test.
+We’ll first do a minimal proof-of-concept only for DEV using one test property. Once verified, you can safely move the full configs.
 
-Method 1: The "Log it on Startup" Test (Most Reliable)
-Since you are already in the codebase, the most definitive way is to inject a test property and print it to the console when the application starts. You can then check your OpenShift logs to see it.
+Follow EXACTLY these steps.
 
-1. Add a test property to your dev Helm config:
-In your dev1-dubhe-values.yaml (or whatever file generates your Dev ConfigMap), ensure you have a distinct property:
+---
 
-YAML
-# Inside your application-dev.yml that Helm uses
-my.custom.helm.test=HELLO_FROM_CONFIGMAP
-2. Add a quick log to your Spring Boot code:
-Open your main application class (the one with @SpringBootApplication) or any @Service bean, and add this:
+# STEP 1 — Create Helm Config Folder
 
-Java
-import jakarta.annotation.PostConstruct; // or javax.annotation.PostConstruct for older Spring Boot
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+Inside:
 
-@Component
-public class ConfigMapVerifier {
+```text
+helm-train1/
+```
 
-    @Value("${my.custom.helm.test:PROPERTY_NOT_FOUND}")
-    private String testProperty;
+create:
 
-    @PostConstruct
-    public void verifyConfig() {
-        System.out.println("=========================================================");
-        System.out.println("CONFIGMAP TEST PROPERTY VALUE: " + testProperty);
-        System.out.println("=========================================================");
+```text
+config/
+```
+
+Final structure:
+
+```text
+helm-train1/
+ ├── config/
+ ├── templates/
+ ├── values.yaml
+```
+
+---
+
+# STEP 2 — Create DEV Test Config File
+
+Create:
+
+```text
+helm-train1/config/application-dev.yml
+```
+
+Put ONLY this:
+
+```yaml
+test:
+  configmap:
+    value: hello-from-configmap
+```
+
+Nothing else for now.
+
+---
+
+# STEP 3 — Create configmap.yaml
+
+Create file:
+
+```text
+helm-train1/templates/configmap.yaml
+```
+
+Put this:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.APP_NAME }}-config
+data:
+  application-dev.yml: |
+{{ .Files.Get "config/application-dev.yml" | indent 4 }}
+```
+
+---
+
+# STEP 4 — Modify deployment.yaml
+
+Now open:
+
+```text
+helm-train1/templates/deployment.yaml
+```
+
+---
+
+## ADD volumeMounts
+
+Inside:
+
+```yaml
+containers:
+  - name: ...
+```
+
+add:
+
+```yaml
+volumeMounts:
+  - name: app-config
+    mountPath: /etc/config
+```
+
+Place it near:
+
+* ports
+* env
+* resources
+
+same level indentation.
+
+---
+
+# STEP 5 — ADD volumes
+
+At POD SPEC LEVEL.
+
+Near bottom of deployment:
+
+```yaml
+spec:
+  template:
+    spec:
+```
+
+add:
+
+```yaml
+volumes:
+  - name: app-config
+    configMap:
+      name: {{ .Values.APP_NAME }}-config
+```
+
+IMPORTANT:
+`volumes` is NOT inside container.
+
+It is inside pod spec.
+
+---
+
+# STEP 6 — Add Spring Config Additional Location
+
+THIS IS THE MOST IMPORTANT STEP.
+
+You must find how your app starts.
+
+I currently do NOT see:
+
+* startup.sh
+* args
+* JAVA_OPTS
+
+in your deployment screenshots.
+
+So first search your repo for:
+
+```text
+spring.config.additional-location
+```
+
+and also search for:
+
+```text
+java -jar
+```
+
+or:
+
+```text
+ENTRYPOINT
+```
+
+in Dockerfile.
+
+You need to tell me where the Java command is started from.
+
+Because we must add:
+
+```bash
+--spring.config.additional-location=optional:file:/etc/config/
+```
+
+there.
+
+WITHOUT THIS STEP IT WILL NOT WORK.
+
+---
+
+# STEP 7 — Add Test Property Reader
+
+Inside your Spring Boot app create temporary controller:
+
+```java
+@RestController
+public class TestController {
+
+    @Value("${test.configmap.value:NOT_WORKING}")
+    private String value;
+
+    @GetMapping("/test-config")
+    public String test() {
+        return value;
     }
 }
-3. Deploy and Check Logs: Push the code, let Harness deploy it, and open your pod's logs in OpenShift. If you see HELLO_FROM_CONFIGMAP printed in the startup logs, you have 100% proof it works.
+```
 
-Method 2: The Port Override "Scream Test" (No Java Code Needed)
-If you don't want to touch the Java code right now, you can temporarily change a core Spring Boot property via the ConfigMap and see if the application reacts to it.
+---
 
-1. Change the server port:
-Update your Helm-managed application-dev.yml to run the server on a different port.
+# STEP 8 — Deploy in DEV
 
-YAML
-server:
-  port: 8099 # If your default is 8080, change it to something weird like 8099
-2. Deploy and Check Logs:
-Run your Harness pipeline. When the pod spins up in OpenShift, check the logs. You should see Tomcat starting up on your overridden port:
-Tomcat initialized with port(s): 8099 (http)
+Deploy using your normal Helm command.
 
-(Note: Don't forget to change this back after you verify it, or your OpenShift Services/Routes might fail to route traffic to the pod!)
+Probably something like:
 
-Method 3: Spring Boot Actuator (If you have it enabled)
-If your application already uses the spring-boot-starter-actuator dependency, Spring gives you an endpoint to inspect exactly where every property is coming from.
+```bash
+helm upgrade --install ...
+```
 
-1. Hit the /actuator/env endpoint:
-If your application is accessible via an OpenShift Route (or if you port-forward to your local machine), navigate to:
-http://<your-app-url>/actuator/env
+using:
 
-2. Search the JSON response:
-Look through the output. Spring Boot will explicitly list file:/etc/config/ as a property source and show you all the keys and values it loaded from that exact path.
+```text
+dev1-dubhe-values.yaml
+```
 
-I highly recommend Method 1 for the absolute clearest proof right there in your OpenShift logging console!
+---
+
+# STEP 9 — Verify ConfigMap Exists
+
+Run:
+
+```bash
+kubectl get configmap
+```
+
+You should see:
+
+```text
+lds-integrating-service-config
+```
+
+(or whatever APP_NAME is)
+
+---
+
+# STEP 10 — Verify Mounted File
+
+Exec into pod:
+
+```bash
+kubectl exec -it <pod-name> -- sh
+```
+
+Run:
+
+```bash
+ls /etc/config
+```
+
+You should see:
+
+```text
+application-dev.yml
+```
+
+Now run:
+
+```bash
+cat /etc/config/application-dev.yml
+```
+
+You should see:
+
+```yaml
+test:
+  configmap:
+    value: hello-from-configmap
+```
+
+---
+
+# STEP 11 — Verify Spring Reads It
+
+Call:
+
+```text
+/test-config
+```
+
+If everything is correct:
+
+```text
+hello-from-configmap
+```
+
+will come.
+
+---
+
+# IMPORTANT
+
+At this point:
+
+* DO NOT move existing configs
+* DO NOT delete env vars
+* DO NOT externalize everything
+
+First prove mounting works.
+
+---
+
+# MOST IMPORTANT THING NOW
+
+You MUST tell me where your Java startup command is located.
+
+Without adding:
+
+```bash
+--spring.config.additional-location=optional:file:/etc/config/
+```
+
+Spring Boot will NOT read mounted configs.
+
+Show me:
+
+* Dockerfile
+  OR
+* startup.sh
+  OR
+* deployment args section.
