@@ -1,0 +1,2704 @@
+openapi: 3.0.0
+info:
+  title: Ratings_Navigator_all_Collection
+  version: 1.0.0
+servers:
+  - url: https://{{ldscoreurl}}
+  - url: https://wlcr-fs-gw-sit2.nam.nsroot.net
+  - url: https://wlcr-fs-gw-uat2.nam.nsroot.net
+  - url: >-
+      https://wlcr-api-gateway-icg-isg-credit-core-176436.apps.namicggtd72d.ecs.dyn.nsroot.net
+  - url: https://{{rnurl}}
+  - url: https://wlcr-fs-gw-sit.nam.nsroot.net
+  - url: >-
+      https://helios-fa-service-icg-isg-credit-financial-176436.apps.namicggtd72d.ecs.dyn.nsroot.net
+  - url: https://{{ldsrefloader}}
+  - url: >-
+      https://wlcr-api-gateway-icg-isg-credit-core-176436.apps.namicggtd35d.ecs.dyn.nsroot.net
+  - url: >-
+      https://com-cam-service-icg-isg-credit-review-176436.apps.namicggtd72d.ecs.dyn.nsroot.net
+  - url: https://{{creditreviewurl}}
+  - url: https://{{ldscompositeurl}}
+  - url: http://localhost:8082
+  - url: >-
+      https://helios-fa-composite-service-icg-isg-credit-financial-176436.apps.namicggtd37d.ecs.dyn.nsroot.net
+  - url: https://localhost
+  - url: >-
+      https://helios-fa-rn-composite-icg-isg-credit-financial-176436.apps.namicggtd43d.ecs.dyn.nsroot.net
+  - url: >-
+      https://helios-fa-rn-composite-icg-isg-credit-financial-176436.apps.namicgswd22u.ecs.dyn.nsroot.net
+  - url: https://wlcr-fs-gw-uat.nam.nsroot.net
+  - url: https://helios-financials-fa-rn-composite-sit.nam.nsroot.net
+  - url: http://localhost:8080
+  - url: https://dev.citirisk.apps.citigroup.net
+  - url: https://uat.citiriskcreditecs.citigroup.net:443
+  - url: https://{{HOST}}
+  - url: https://{{ldsauthurl}}
+tags:
+  - name: Facility
+  - name: Obligor
+  - name: ApprovedFRR
+  - name: Financials
+  - name: Financials > Obligor
+  - name: ClientRiskRating
+  - name: RiskRatingReview
+  - name: LinkAssessmentNavigator
+  - name: RN-RefData
+  - name: Credit Review
+  - name: Composite
+  - name: Service
+  - name: LGD
+  - name: Questionare
+  - name: New Folder
+  - name: Collateral
+  - name: Rule Engine
+  - name: ODS
+  - name: Case unlock
+  - name: SAT
+paths:
+  /frrNavigators/14805:
+    get:
+      tags:
+        - Facility
+      summary: GetFacilityNavigator
+      parameters:
+        - name: doVersion
+          in: query
+          schema:
+            type: integer
+          example: '4'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/frrNavigators/14805:
+    get:
+      tags:
+        - Facility
+      summary: GetFacilityNavigator Copy
+      parameters:
+        - name: doVersion
+          in: query
+          schema:
+            type: integer
+          example: '4'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /frrNavigators/10009:
+    put:
+      tags:
+        - Facility
+      summary: UpdateNavigatorRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 1
+                doID: '10009'
+                modelVersion: 1
+                modelMinorVersion: 0
+                dictionaryVersion: '40.0'
+                facilityRiskRatingNavigator:
+                  facilityRiskRatingTypeEnum: string
+                  facilityRiskRatingTagText: string
+                  facilityRiskRatingNavigatorStatusEnum: Baseline
+                  createUserDatetime: '2024-08-21T15:38:54.036Z'
+                  createUserSystemID: string
+                  createdBySOEID: UJ56346
+                  componentID: '1'
+                  updateTimestamp: '2024-08-21T15:44:43.914Z'
+                  asOfTimestamp: '2024-08-21T15:38:54.036Z'
+                  wlcraction:
+                    actionType: UPDATE
+                  facilityRiskRatingAssessmentID:
+                    associationType: FRR_NAVIGATOR_FRR_ASSESSMENT_ASSOC
+                    objType: FRR_ASSESSMENT
+                    objID: '10019'
+                    wlcraction:
+                      actionType: UPDATE
+                updateTimestamp: '2024-08-21T15:44:43.890Z'
+                createTimestamp: '2024-08-21T15:44:43.890Z'
+      parameters:
+        - name: doVersion
+          in: query
+          schema:
+            type: integer
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/frrNavigators/92365:
+    put:
+      tags:
+        - Facility
+      summary: DeltaUpdateNavigatorRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                doID: '92365'
+                version: '2'
+                facilityRiskRatingNavigator:
+                  facilityRiskRatingSummaryTagText: SEZN
+                  wlcraction:
+                    actionType: UPDATE
+                updateTimestamp: '2026-01-16T15:44:43.890Z'
+      parameters:
+        - name: isCalculateDelta
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /frrNavigators/11060:
+    put:
+      tags:
+        - Facility
+      summary: DeltaUpdateNavigatorRequest delete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 2
+                doID: '39195'
+                obligorRiskRatingNavigator:
+                  wlcraction:
+                    actionType: DELETE
+      parameters:
+        - name: isCalculateDelta
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /frrNavigators:
+    post:
+      tags:
+        - Facility
+      summary: CreateNavigatorRequest Dev
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 1
+                modelVersion: 1
+                modelMinorVersion: 0
+                dictionaryVersion: '40.0'
+                facilityRiskRatingNavigator:
+                  obligorRiskRatingNavigatorID:
+                    associationType: FRR_NAVIGATOR_ORR_NAVIGATOR_ASSOC
+                    objType: ORR_NAVIGATOR
+                    objID: '11590'
+                  facilityRiskRatingTypeEnum: LGD
+                  facilityRiskRatingTagText: SME
+                  createUserDatetime: '2024-08-21T15:38:54.036Z'
+                  createUserSystemID: string
+                  createdBySOEID: uj56346
+                  componentID: US12345-3
+                  updateTimestamp: '2024-08-21T15:38:54.036Z'
+                  asOfTimestamp: '2024-08-21T15:38:54.036Z'
+                updateTimestamp: '2024-08-21T15:38:54.036Z'
+                createTimestamp: '2024-08-21T15:38:54.036Z'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /frrAssessments/10056:
+    get:
+      tags:
+        - Facility
+      summary: GetNavigatorAssessment
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/frrAssessments/10206:
+    get:
+      tags:
+        - Facility
+      summary: GetNavigatorAssessment Copy
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /frrAssessments:
+    post:
+      tags:
+        - Facility
+      summary: CreateNavigatorAssessment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                facilityRiskRatingAssessment:
+                  facilityRiskRatingAssessmentOutput:
+                    - facilityRiskRatingAssessmentOutputID: 1
+                      facilityRiskRatingSequenceNumber: 8
+                      facilityRiskRatingTypeCode: RFRR
+                      createdBySOEID: MS80119
+                      updateTimestamp: '2024-12-12T21:51:45.281Z'
+                      asOfTimestamp: '2024-12-12T21:51:45.281Z'
+                      facilityRiskRatingAssessmentCapping:
+                        - facilityRiskRatingAssessmentCappingID: 1
+                          createdBySOEID: MS80119
+                          updateTimestamp: '2024-12-12T21:51:45.281Z'
+                          asOfTimestamp: '2024-12-12T21:51:45.281Z'
+                          facilityCapRiskRatingSequenceNumber: 8
+                          facilityRiskRatingCappingTypeEnum: Cross Border Capping
+                          createUserDatetime: '2025-02-10T21:33:05.011Z'
+                          createUserSystemID: string
+                          createUserSOEID: string
+                    - facilityRiskRatingAssessmentOutputID: 2
+                      facilityRiskRatingSequenceNumber: 8
+                      rationaleOverrideCommentText: >-
+                        <ul>
+
+                        <li>FRR is set to equal to FORR/RLR primarily due to
+                        Helios limitation as the obligor Net Sales not captured,
+                        which is needed to calculate FRR.&nbsp;</li>
+
+                        </ul>
+                      facilityRiskRatingTypeCode: FRR
+                      createdBySOEID: te57609
+                      updateTimestamp: '2024-12-12T21:51:45.281Z'
+                      asOfTimestamp: '2024-12-12T21:51:45.281Z'
+                  facilityRiskRatingStateEnum: Baseline
+                  facilityRiskRatingTypeEnum: Manual/ Direct FRR
+                  createdBySOEID: MS80119
+                  componentTypeCode: CRID
+                  componentID: US2157743-1
+                  updateTimestamp: '2024-12-12T21:52:24.063Z'
+                  asOfTimestamp: '2024-12-12T21:52:24.063Z'
+                modelVersion: 1
+                modelMinorVersion: 0
+                dictionaryVersion: '44.0'
+                updateTimestamp: '2024-12-12T21:52:24.084Z'
+                createTimestamp: '2024-12-12T21:51:45.232Z'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /saveDirectFRR:
+    post:
+      tags:
+        - Facility
+      summary: saveDirectFRR
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                status: SUCCESS
+                data:
+                  version: 1
+                  modelVersion: 1
+                  modelMinorVersion: 0
+                  dictionaryVersion: '40.0'
+                  doID: '10212'
+                  facilityRiskRatingAssessment:
+                    facilityRiskRatingTypeEnum: Direct FRR
+                    facilityRiskRatingAssessmentOutput:
+                      - facilityRiskRatingTypeCode: RFRR
+                        facilityRiskRatingSequenceNumber: 7
+                        facilityRiskRatingAssessmentOutputID: 1
+                        updateTimestamp: '2024-10-25T17:58:34.770Z'
+                        asOfTimestamp: '2024-10-25T17:58:34.770Z'
+                      - facilityRiskRatingTypeCode: FRR
+                        facilityRiskRatingSequenceNumber: 7
+                        facilityRiskRatingAssessmentOutputID: 2
+                        rationaleOverrideCommentText: testData100
+                        updateTimestamp: '2024-10-25T17:58:34.770Z'
+                        asOfTimestamp: '2024-10-25T17:58:34.770Z'
+                    facilityRiskRatingStateEnum: Baseline
+                    componentTypeCode: CRID
+                    componentID: US12345-3
+                    updateTimestamp: '2024-10-25T17:58:34.761Z'
+                    asOfTimestamp: '2024-10-25T17:58:34.761Z'
+                  updateTimestamp: '2024-10-25T17:58:34.750Z'
+                  createTimestamp: '2024-10-25T17:58:34.750Z'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /orrNavigators:
+    post:
+      tags:
+        - Obligor
+      summary: CreateObligorNavigator With CreditRelationship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /obligorRiskRatingNavigators/12064:
+    put:
+      tags:
+        - Obligor
+      summary: UpdateObligorNavigator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 1
+                modelVersion: 1
+                modelMinorVersion: 0
+                dictionaryVersion: '40.0'
+                doID: '12064'
+                updateTimestamp: '2024-09-09T16:15:19.655Z'
+                createTimestamp: '2024-09-09T16:15:19.655Z'
+                obligorRiskRatingNavigator:
+                  obligorRiskRatingNavigatorStatusEnum: Initialized
+                  createdBySOEID: UJ56346
+                  createUserDatetime: '2024-08-23T20:29:22.002Z'
+                  createUserSystemID: string
+                  wlcraction:
+                    actionType: UPDATE
+                  updateTimestamp: '2024-09-09T16:15:19.688Z'
+                  asOfTimestamp: '2024-08-23T20:29:22.002Z'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/orrNavigators/441445:
+    put:
+      tags:
+        - Obligor
+      summary: DeltaUpdateObligorNavigator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 55
+                doID: '441445'
+                obligorRiskRatingNavigator:
+                  creditClassificationCode: PWL
+                  wlcraction:
+                    AttributesResetToNull:
+                      - CrossBorderFromCountryCode
+                      - CrossBorderToCountryCode
+                      - CrossBorderUSDAmount
+                      - CrossBorderExpiryDate
+                      - RatingGenerationSuccessCriteriaIndicator
+                    actionType: UPDATE
+      parameters:
+        - name: isCalculateDelta
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/orrNavigators/302929:
+    put:
+      tags:
+        - Obligor
+      summary: DeltaUpdateDeleteObligorNavigator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 14
+                doID: '302929'
+                obligorRiskRatingNavigator:
+                  totalFacilityUSDAmount: 20000001
+                  wlcraction:
+                    actionType: UPDATE
+      parameters:
+        - name: isCalculateDelta
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /orrNavigators/34978:
+    put:
+      tags:
+        - Obligor
+      summary: DeltaUpdateObligorNavigator Copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 3
+                doID: '34978'
+                updateTimestamp: '2024-09-09T16:15:19.655Z'
+                obligorRiskRatingNavigator:
+                  obligorRiskRatingNavigatorStatusEnum: Initialized
+                  wlcraction:
+                    actionType: UPDATE
+      parameters:
+        - name: isCalculateDelta
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/orrNavigators/267096:
+    get:
+      tags:
+        - Obligor
+      summary: Get orrNavigators
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/orrAssessments/SIT-100816:
+    get:
+      tags:
+        - Obligor
+      summary: Get orrAssessments
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/orrAssessments/SIT-78440:
+    put:
+      tags:
+        - Obligor
+      summary: delta orrAssessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 9
+                obligorRiskRatingAssessment:
+                  obligorRiskRatingAlert: []
+                  wlcraction:
+                    actionType: UPDATE
+                  updatedBySOEID: kk33354
+                  createdBySOEID: kk33354
+                  updateTimestamp: '2025-10-03T07:23:43.734Z'
+                  asOfTimestamp: '2025-10-03T07:23:43.734Z'
+                modelMinorVersion: 0
+                dictionaryVersion: '59.0'
+                versionStatus: VALID
+                isDeleted: false
+                createUserDatetime: '2025-10-01T19:30:34.232Z'
+                updateUserDatetime: '2025-10-03T07:37:03.579Z'
+                doID: SIT-78440
+                modelVersion: 1
+                updateUserSystemID: WLCR-FS-176436-Financials
+                createUserSystemID: WLCR-FS-176436-Financials
+                updateTimestamp: '2025-10-03T07:37:03.579Z'
+                createTimestamp: '2025-10-03T07:08:43.705Z'
+      parameters:
+        - name: isCalculateDelta
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/multiDo/financialAdapter/orrNavigatorAssessmentSaveUpdate:
+    post:
+      tags:
+        - Obligor
+      summary: orrNavigatorAssessmentSaveUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /approvedFacilityRiskRatings/12551:
+    get:
+      tags:
+        - ApprovedFRR
+      summary: Get approvedFRR
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - ApprovedFRR
+      summary: DeltaUpdateApprovedFRR
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 3
+                modelMinorVersion: 0
+                dictionaryVersion: '40.0'
+                modelVersion: 1
+                doID: '12551'
+                updateTimestamp: '2024-10-24T19:25:40.740Z'
+                createTimestamp: '2024-10-24T19:25:40.740Z'
+                approvedFacilityRiskRating:
+                  componentTypeCode: cridss
+                  wlcraction:
+                    actionType: UPDATE
+      parameters:
+        - name: isCalculateDelta
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /approvedFacilityRiskRatings:
+    post:
+      tags:
+        - ApprovedFRR
+      summary: Create approvedFRR
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 1
+                modelVersion: 1
+                modelMinorVersion: 0
+                dictionaryVersion: '40.0'
+                approvedFacilityRiskRating:
+                  ruleBasedFacilityRiskRatingText: '99'
+                  seniorityOfClaimCode: '20'
+                  performanceStatusCode: PERFORMING
+                  creditClassificationCode: P
+                  approvedDatetime: '2024-10-24T17:58:31.236Z'
+                  facilityRiskRatingText: '1'
+                  supportTypeDescription: SUPPORT
+                  crossBorderTransactionAllowedIndicator: true
+                  facilityRiskRatingPriorToCrossBorderCappingText: '1'
+                  createUserDatetime: '2024-10-24T17:58:31.236Z'
+                  createUserSystemID: '6684'
+                  createdBySOEID: ca31889
+                  componentID: US12398
+                  componentTypeCode: crid
+                  updateTimestamp: '2024-10-24T17:58:31.236Z'
+                  asOfTimestamp: '2024-10-24T17:58:31.236Z'
+                updateTimestamp: '2024-10-24T17:58:31.236Z'
+                createTimestamp: '2024-10-24T17:58:31.236Z'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /orrAssessments:
+    post:
+      tags:
+        - Financials > Obligor
+      summary: create ORR Assessment Based OnCredit Relationship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-service/getTemplateByTemplateId:
+    post:
+      tags:
+        - Questionare
+      summary: getTemplateByTemplateId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                templateId: 60000100
+      parameters:
+        - name: WLCR-User-Token
+          in: header
+          schema:
+            type: string
+          example: >-
+            eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJkYTQ1Nzk4IiwiYWN0aXZlIjp0cnVlLCJpYXQiOjE3NDg5NDkxMzIsImV4cCI6MTc0OTAzNTUzMiwianRpIjoiYjRlNDQzZDQtMjc1NC00ZjUwLWE1ZGQtMWM5MGExZDQzODBlIiwidXNlckluZm8iOnsidXNlcklkIjoiZGE0NTc5OCIsImZ1bGxOYW1lIjoiQW5hbGRhcyxEaWxpcCIsImxhc3ROYW1lIjoiQW5hbGRhcyIsImdlSWQiOiIxMDExMTQ1Nzk4IiwiZW1haWwiOiJkaWxpcC5hbmFsZGFzQGNpdGkuY29tIiwiZW1iZWRFbnRpdGxlbWVudERhdGEiOiJlTnBWa0w5S0EwRVFoemYvMElRSWlTR0NpRDVDSHNCR1JRZ0d0TEt3UERlM2MzZWptOXRqZG5KM3NmTUY3QzNzQmEzdHhjSmFTOS9CZDNEdjBIaFoySUg5WUg3NzQzditGaTFMb244bFV6bWFNK3JSaWJUUm1VeGFhMSt2YjF1WEh3MVJINHVPTmxLTnBjK0dKcUxORVlHTmpGWjVjbkFvaXRQTjF0M3N1VnRuc2FHQU1BWGxrZEZnWGZqZ1AveUlTQzVPMFhKKys3bDcveTRmR3FJMkVVMkxONUFuYnIyZE5ZdkpZdHMzS1pBTXdaUFdZaGpQSUdadkpxK0JXQXg4QW9Yc0VhUUkyUjhkcmxJL0FyL2ttd0dTWlU4YjVja2tvU0xXZGNTcFQ1WDNjQjY3MWhraFl4eitSaFI4YnpYVXpxY1dGVXBhTEg4TnlMaG1KZ2pRaDhwaUw0VFk5ZGRMbExQb0FNenMwa3BGK2JIUitoem80dTdwWlgvbnNWODZhYkFNU3lYTlVrbU5SYmZhTWM5L0FNZ3psOTQ9In19.ILGTmTEhQDWv8anBzsdfr83TU3KKPDVFemKdxkfGl4cH7VrnMXkCrwv0CuHJXvsKa-6GE7Ctwhv4QjkFMHW9wpRUEnvymWHrdj1snnLFNn_lwwi2GN8lg1hx1uZ24N56bs0kwwU-NnNXd1ep4U3Jkwq1bPk2TVmUtC2PO0xHR3YuWlfOfP7NuJ_lN5jAJcKxXwCOu6P5YlmA1MYXTDLDG57R3auXOpglppEVIi79TMN81YaIWQv_48DrLeTVLEIwnJ8yWmZCsUNp2ifXyjEfDqxVNfUEl3Uf4t6IlxHc2LDPfVzd0ELIr2SkqZgaoopmO8CpYW3QHhM_tgpm31IgbQ\
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+        - name: ''
+          in: query
+          schema:
+            type: string
+        - name: ''
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /clientRiskRatings:
+    post:
+      tags:
+        - ClientRiskRating
+      summary: ClientRiskRating With Party
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 0
+                doID: null
+                modelVersion: 1
+                modelMinorVersion: 0
+                dictionaryVersion: '40.0'
+                clientRiskRating:
+                  obligorRiskRatingSummaryTagText: Subsidiary
+                  createdBySOEID: uj56346
+                  totalFacilityUSDAmount: 300
+                  approvedBySOEID: uj56346
+                  baselinedBySOEID: uj56346
+                  ratingSourceCitiSystemInventoryID: 0
+                  soborrcode: '20'
+                  finalObligorRiskRatingText: 4+
+                  baselineObligorRiskRatingText: 4+
+                  relationshipLimitRatingText: 4+
+                  supportTypeDescription: Full Support
+                  approvedDatetime: '2024-08-23T20:29:22.002Z'
+                  createdDatetime: '2024-08-23T20:29:22.002Z'
+                  baselinedDatetime: '2024-08-23T20:29:22.002Z'
+                  createUserDatetime: '2024-08-23T20:29:22.002Z'
+                  RatedClientDoID: 71585
+                  clientTypeCode: Party
+                  createUserSystemID: '176436'
+                  partyID:
+                    associationType: CLIENT_RISK_RATING_PARTY_ASSOC
+                    objType: PARTY
+                    objID: '71585'
+                  cagid: '1000021438'
+                  gfcid: '1000208007'
+                  updateTimestamp: '2024-08-23T20:29:22.002Z'
+                  asOfTimestamp: '2024-08-23T20:29:22.002Z'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/riskRatingReviews:
+    get:
+      tags:
+        - RiskRatingReview
+      summary: Get Risk Rating Review
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/do-api/api/v1/do/riskRatingReviews/15027:
+    put:
+      tags:
+        - RiskRatingReview
+      summary: Update Risk Rating Review
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 2
+                doID: '15027'
+                riskRatingReview:
+                  wlcraction:
+                    AttributesResetToNull:
+                      - ReworkIndicator
+                    actionType: UPDATE
+      parameters:
+        - name: isCalculateDelta
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /riskRatingReviews:
+    post:
+      tags:
+        - RiskRatingReview
+      summary: Create Risk Rating Review Copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                version: 0
+                modelVersion: 1
+                modelMinorVersion: 0
+                dictionaryVersion: '40.1'
+                riskRatingReview:
+                  riskRatingCompletionIndicator: false
+                  createUserDatetime: '2024-10-10T20:00:30.753Z'
+                  businessCaseID:
+                    associationType: RISK_RATING_REVIEW_BUSINESS_CASE_ASSOC
+                    objType: BUSINESS_CASE
+                    objID: '31547'
+                  createUserSystemID: aj40639
+                  asOfTimestamp: '2024-10-10T20:00:30.753Z'
+                  updateTimestamp: '2024-10-10T20:00:30.753Z'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /linkORRAssessmentToNavigator:
+    post:
+      tags:
+        - Service
+      summary: delink
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                obligorNavigatorDoId: '18961'
+                obligorAssessmentDoId: DEV1-23756
+      parameters:
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: MS80119
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /validateSubmit:
+    post:
+      tags:
+        - LinkAssessmentNavigator
+      summary: validateSubmit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                doIdOfOrrEntity: DEV1-1012533
+      parameters:
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: UJ56346
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/facilityriskratingadjustmenttype:
+    post:
+      tags:
+        - RN-RefData
+      summary: FacilityRiskRatingRationaleType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/financial/admin/get/facilityriskratingadjustmenttype:
+    post:
+      tags:
+        - RN-RefData
+      summary: FacilityRiskRatingRationaleType Copy 2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/facilityriskratingtype:
+    post:
+      tags:
+        - RN-RefData
+      summary: FacilityRiskRatingType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/facilityriskratingstate:
+    post:
+      tags:
+        - RN-RefData
+      summary: facilityriskratingstate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/obligorriskratingtype:
+    post:
+      tags:
+        - RN-RefData
+      summary: ObligorRiskRatingType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/obligorriskratingstate:
+    post:
+      tags:
+        - RN-RefData
+      summary: ObligorRiskRatingState
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/soborrtype:
+    post:
+      tags:
+        - RN-RefData
+      summary: SoborrType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/ratingderivedoutsideapprovedprocessreason:
+    post:
+      tags:
+        - RN-RefData
+      summary: RDAP
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/riskratingnavigatorstatus:
+    post:
+      tags:
+        - RN-RefData
+      summary: RiskRatingAdjustmentValue
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/creditriskratingtype:
+    post:
+      tags:
+        - RN-RefData
+      summary: collateralValue
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /financial/admin/get/facilityriskratingnavigatorsourceassettype:
+    post:
+      tags:
+        - RN-RefData
+      summary: facilityriskratingnavigatorsourceassettype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /facility/ref/get/componenttype:
+    post:
+      tags:
+        - RN-RefData
+      summary: ComponentType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /common/wsref/get/clienttype:
+    post:
+      tags:
+        - RN-RefData
+      summary: ClienType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/common/admin/get/regulatorysegment:
+    post:
+      tags:
+        - RN-RefData
+      summary: regulatorysegment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/common/admin/get/assettype:
+    post:
+      tags:
+        - RN-RefData
+      summary: assettype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/common/admin/get/supporttype:
+    post:
+      tags:
+        - RN-RefData
+      summary: supporttype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/common/wsref/get/clienttype:
+    post:
+      tags:
+        - RN-RefData
+      summary: ClienType Copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/common/admin/get/facilitytype:
+    post:
+      tags:
+        - RN-RefData
+      summary: Facilitytype
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/common/admin/get/creditriskrating:
+    post:
+      tags:
+        - RN-RefData
+      summary: creditriskrating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      parameters:
+        - name: isAllEntries
+          in: query
+          schema:
+            type: boolean
+          example: 'false'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/financial/admin/get/financialnoncreditmanagedportfolio:
+    post:
+      tags:
+        - RN-RefData
+      summary: financialnoncreditmanagedportfolio
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    WLCRStatusCode: A
+      parameters:
+        - name: isAllEntries
+          in: query
+          schema:
+            type: boolean
+          example: 'false'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/financial/admin/update/financialnoncreditmanagedportfolio:
+    put:
+      tags:
+        - RN-RefData
+      summary: financialnoncreditmanagedportfolio
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - refData:
+                    wlcrstatusCode: I
+                    expiryDate: '2021-12-31T00:00:00.000+00:00'
+                    effectiveEndDate: '9999-12-31T00:00:00.000+00:00'
+                    effectiveStartDate: '2024-05-30T00:00:00.000+00:00'
+                    assessmentMethodologyDescription: CommercialRealEstateORROLR
+                    generationNumber: 1
+                    releaseDate: null
+                    assessmentMethodologyLongDescription: CommercialRealEstateORROLR
+                    minimumRatingYearsNumber: 0
+                    soborrcode: '999'
+                    sourceCreatedBySOEID: Helios
+                    sourceSystemStatusIndicator: false
+                    isPrivateBankIndicator: false
+                    modelVersionText: '1.0'
+                    citiSystemInventoryID: 0
+                    financialSpreadIndicator: false
+                    sourceUpdatedBySOEID: null
+                    soborrname: null
+                    minimumBaselineYearsNumber: 0
+                    assessmentMethodologyCode: COMREOLR
+                  domainVersion: 1
+                  createTs: '2023-09-01T23:44:58.000+00:00'
+                  createUserSOEID: INIT
+                  approveTs: '2023-09-01T23:44:58.000+00:00'
+                  approveUserSOEID: INIT
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/review/cam-service/credit-review/casemanagement/riskratings/caseAssociatedCustomers:
+    post:
+      tags:
+        - Credit Review
+      summary: APi 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: '1334767'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/review/cam-service/credit-review/casemanagement/riskratings/obligorsV2:
+    post:
+      tags:
+        - Credit Review
+      summary: Api 2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: '1334767'
+                customerDoId: '64742'
+                customerType: CreditRelationship
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /credit-review/casemanagement/riskratings/obligorsV2:
+    post:
+      tags:
+        - Credit Review
+      summary: Api 2 Copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: '95565'
+                customerDoId: '19558'
+                customerType: CreditRelationship
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/review/cam-service/credit-review/casemanagement/riskratings/obligorsRefInfo:
+    post:
+      tags:
+        - Credit Review
+      summary: Api 3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: '607065'
+                customerDoId: '129405'
+                customerType: Party
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /credit-review/casemanagement/facility/fetchFacilityRefDataV2:
+    post:
+      tags:
+        - Credit Review
+      summary: Api 4 Copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityId: '272225'
+                businessCaseDoId: '29578'
+                componentID: US2448414-3
+                componentType: CRID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /credit-review/casemanagement/facility/fetchFacilityRefData:
+    post:
+      tags:
+        - Credit Review
+      summary: getobligorRef
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityId: '161646'
+                businessCaseDoId: '33662'
+                componentId: CA1010085-6
+                componentTypeCd: CRID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /ratingNavigator/getForrOfSupportProvider:
+    get:
+      tags:
+        - Composite
+      summary: getForrOfSupportProvider
+      parameters:
+        - name: caseId
+          in: query
+          schema:
+            type: integer
+          example: '123'
+        - name: gfcId
+          in: query
+          schema:
+            type: integer
+          example: '1000869046'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /ratingNavigator/fetchFacilities:
+    get:
+      tags:
+        - Composite
+      summary: fetchFacilities
+      parameters:
+        - name: orrnDoID
+          in: query
+          schema:
+            type: integer
+          example: '32700'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /ratingNavigator/api/v1/fetchChecklistResponses:
+    get:
+      tags:
+        - Composite
+      summary: fetchChecklistResponses
+      parameters:
+        - name: caseId
+          in: query
+          schema:
+            type: integer
+          example: '27387'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/ratingNavigator/fetchObligors:
+    post:
+      tags:
+        - Composite
+      summary: fetchObligors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: 283163
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /ratingNavigator/fetchBaselinedObligors:
+    get:
+      tags:
+        - Composite
+      summary: fetchBaselinedObligors Copy
+      parameters:
+        - name: orrnDoID
+          in: query
+          schema:
+            type: integer
+          example: '15733'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /:
+    get:
+      tags:
+        - General
+      summary: New Request
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /ratingNavigator/markAsComplete:
+    get:
+      tags:
+        - Composite
+      summary: markAsComplete Copy 2
+      parameters:
+        - name: caseId
+          in: query
+          schema:
+            type: integer
+          example: '10327'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/ratingNavigator/markAsCompleteV2:
+    post:
+      tags:
+        - Composite
+      summary: markAsCompleteV2
+      requestBody:
+        content: {}
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: caseId
+          in: query
+          schema:
+            type: integer
+          example: '12482'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/ratingNavigator/fetchBusinessActivityCaseDetails:
+    get:
+      tags:
+        - Composite
+      summary: fetchBusinessActivityCaseDetails
+      parameters:
+        - name: obligornavigatordoId
+          in: query
+          schema:
+            type: integer
+          example: '10171'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/ratingNavigator/getSecondaryObligorDetails:
+    get:
+      tags:
+        - Composite
+      summary: getSecondaryObligorDetails
+      parameters:
+        - name: businessActivityDoId
+          in: query
+          schema:
+            type: integer
+          example: '1696963'
+        - name: frrNavigatorDoId
+          in: query
+          schema:
+            type: integer
+          example: '43360'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-composite/api/v1/ratingNavigator/getGfrn:
+    get:
+      tags:
+        - Composite
+      summary: getGfrn
+      parameters:
+        - name: creditLineDoId
+          in: query
+          schema:
+            type: integer
+          example: '352005'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-composite/api/v1/ratingNavigator/getSecondaryObligorsForValidation:
+    get:
+      tags:
+        - Composite
+      summary: getSecondaryObligorsForValidation
+      parameters:
+        - name: gfrnId
+          in: query
+          schema:
+            type: string
+          example: US2975589-2
+        - name: orrnId
+          in: query
+          schema:
+            type: integer
+          example: '36090'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /ratingNavigator/api/v1/fetchObligorsLite:
+    post:
+      tags:
+        - Composite
+      summary: fetchObligorsLite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: '263345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/ratingNavigator/fetchCollateralData:
+    post:
+      tags:
+        - Composite
+      summary: fetchCollateralData
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                frrNavigatorIds:
+                  - '10406'
+                  - ''
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-composite/api/v1/ratingNavigator/fetchNavigatorInformationForStatusUpdate:
+    get:
+      tags:
+        - Composite
+      summary: fetchNavigatorInformationForStatusUpdate
+      parameters:
+        - name: caseId
+          in: query
+          schema:
+            type: integer
+          example: '54138'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-composite/api/v1/ratingNavigator/getFORRRatingsWithGfcIds:
+    post:
+      tags:
+        - Composite
+      summary: getFORRRatingsWithGfcIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                orrdoId: '15892'
+                gfcIds:
+                  - '1001587672'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-composite/api/v2/sovereignRiskRating/fetchSovereignRiskRatingForCountry:
+    get:
+      tags:
+        - Composite
+      summary: SRR
+      parameters:
+        - name: countryCode
+          in: query
+          schema:
+            type: string
+          example: CA
+        - name: ratingOutputType
+          in: query
+          schema:
+            type: string
+          example: FORR
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-composite/api/v2/sovereignRiskRating/fetchSovereignRiskRatingForCountryList:
+    post:
+      tags:
+        - Composite
+      summary: SRR FOR ALL
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                countryList:
+                  - US
+                ratingOutputType: FORR
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/ratingNavigator/fetchRelatedObligorDetailsByfrrnDoIds:
+    post:
+      tags:
+        - Composite
+      summary: getRelatedObligors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessCaseDoId: '121567'
+                frrnDoIDs:
+                  - '77523'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-rn-composite/api/v1/ratingNavigator/fetchSecuritizedFacilities:
+    post:
+      tags:
+        - Composite
+      summary: fetchSecuritizedFacilities
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /getObligors:
+    post:
+      tags:
+        - Service
+      summary: get OBligors From Ratings Navigator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                caseId: 128
+      parameters:
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: aj40639
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /generateFacilityRiskRating:
+    post:
+      tags:
+        - Service
+      summary: generateFRR
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: '283163'
+                businessCaseDoId: '31260'
+                isLoadLoader: false
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: RM85146
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /getFacilities:
+    post:
+      tags:
+        - Service
+      summary: getObligorsForRating Copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                obligorNavigatorDoId: '13289'
+      parameters:
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: uj56346
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-ratings-navigator/editFacility:
+    post:
+      tags:
+        - Service
+      summary: editFacilities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                facilityNavigatorDoId: '20991'
+                ownerType: IB
+                obligorNavigatorDoId: '24085'
+                gfcId: '1001179515'
+                supportProviderGfcid: null
+                obligorForr: 5-
+                businessActivityDoId: '419267'
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-ratings-navigator/updateNavigatorStatus:
+    post:
+      tags:
+        - Service
+      summary: updateNavigatorStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                caseId: '125362'
+                status: Approved
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /getObligorRefInfo:
+    post:
+      tags:
+        - Service
+      summary: getFacilityRefData
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                obligorNavigatorTO:
+                  navigatorDoID: '11504'
+                  partyDoID: null
+                  crDoID: '10040'
+                  gfcId: '1000021438'
+                  cagId: '1000021438'
+                  customerName: ORPHANED CHILDREN
+                  countryOfRisk: US
+                  countryOfDomicile: US
+                  tfa: '1000'
+                  soborr: null
+                  lastApprovedForr: null
+                  navigatorStatus: Baseline
+                  tag: Subsidiary
+                  ratingType: Independently Rated
+                  ratingTypeOptions:
+                    - Independently Rated
+                  supportCategoryCd: No Support
+                  orrDoID: DEV2-1008292
+                  borr: '12'
+                  forr: '12'
+                  rdap: false
+                  creationDate: null
+                  asDate: null
+                  navigatorMaxVersion: '3'
+                  assessmentMaxVersion: '4'
+                  tagArray:
+                    - Subsidiary
+      parameters:
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: sp77632
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /validateFRRRequest:
+    post:
+      tags:
+        - Service
+      summary: validateFRRRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                obligorNavigatorDoId: '10252'
+                gfcId: '1005286286'
+                obligorName: REDACTED_CAGID_NM
+                gfrn: US2160218-6
+                clusterFacilityIndicator: false
+                ownerType: IB
+                ratingType: Manual/ Direct FRR
+                primarySupportproviderGfcId: '1021012765'
+                supportType: LTFS(WUBIG)
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: ND52733
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-ratings-navigator/saveDirectFRR:
+    post:
+      tags:
+        - Service
+      summary: saveDirectFRR
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                facilityDetail:
+                  - id: rfrr
+                    value: '7'
+                    displayField: '7'
+                  - id: adjustment
+                    value: ''
+                    displayField: ''
+                  - id: adjustmentRationale
+                    value: Subordination
+                    displayField: Subordination
+                  - id: remarks
+                    value: <p>test</p>
+                    displayField: <p>test</p>
+                facilityNavigatorDoId: '44771'
+                componentId: 73009541-a790-4822-a92c-cb0b4d1110b0
+                facilityRatingType: Notching from FORR
+                xbrr: '7'
+                frr: '7'
+                cappingIndicator: false
+                cappingType: Cross Border Capping
+                srrDoId: SIT-24681
+                xbrrReportingPeriodYear: '2025'
+                xbrrReportingQuarterNumber: '3'
+                ownerType: CCB
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+        - name: ''
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/re/api/v1/ruleexec:
+    post:
+      tags:
+        - Rule Engine
+      summary: rule SIT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                namespace: financials
+                ruleName: ICG_ORREvaluationRule
+                version: '1.0'
+                inputData:
+                  data:
+                    supportType: WUBIG
+                    baselinedObligorORR: 14
+                    supportProviderORR: 6
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-ratings-navigator/linkORRAssessmentToNavigator:
+    post:
+      tags:
+        - Service
+      summary: linkORRAssessmentToNavigator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                obligorNavigatorDoId: '24103'
+                obligorAssessmentDoId: SIT2-46748
+                ratingType: Independently Rated
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: AJ40639
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-ratings-navigator/updateFacilityRatingType:
+    post:
+      tags:
+        - Service
+      summary: updateFacilityRatingType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: '225237'
+                riskRatingReviewDoId: '10103'
+                businessCaseDoId: '33358'
+                facilityNavigatorDoId: '13029'
+                obligorNavigatorDoId: '15892'
+                supportType: ''
+                currentTfa: 900010000
+                lastApprovedFrr: ''
+                facilityRatingType: Notching from FORR
+                cappedFrr: ''
+                status: Not Started
+                componentTypeCode: CRID
+                supportProviderGfcid: '1001587672'
+                forr: 2+
+                soborr: '56'
+                gfcId: '1001587672'
+                crDoID: '11799'
+                crossBorderFromCountry: ''
+                crossBorderToCountry: ''
+                xbrr: ''
+                clusterFacilityIndicator: false
+                frontingFacilityIndicator: false
+                facilityRatingTypeOptions:
+                  - Notching from FORR
+                  - Manual/ Direct FRR
+                ownerType: ''
+                version: 5
+                proposedComponentIndicator: false
+                orrNavigatorStatus: Baseline
+                obligorName: HUMANA INC
+                cagId: '1001587672'
+                cappingIndicator: false
+                crossBorderIndicator: 'No'
+                componentId: US2876465-6
+                rfrr: ''
+                frr: ''
+                tagArray: []
+                adjustment: 4
+                isCollateralAvailable: false
+                facilityPerformingStatusCode: ''
+                cappingType: ''
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: WLCR-User-Token
+          in: header
+          schema:
+            type: string
+          example: >-
+            eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzbTUxNDMzIiwiYWN0aXZlIjp0cnVlLCJpYXQiOjE3NjIxODY5NzEsImV4cCI6MTc2MjI3MzM3MSwianRpIjoiMDg3NGYwYjQtMzljZC00M2U1LTllM2QtNGEzOTg0OTM3ODdjIiwidXNlckluZm8iOnsidXNlcklkIjoic201MTQzMyIsImZ1bGxOYW1lIjoiTWFsbGlrLFNhbmppYiIsImxhc3ROYW1lIjoiTWFsbGlrIiwiZ2VJZCI6IjEwMTE1NTE0MzIiLCJlbWFpbCI6InNhbmppYi5tYWxsaWtAY2l0aS5jb20iLCJlbWJlZEVudGl0bGVtZW50RGF0YSI6ImVOcHRrYjl1RkRFUXhwM2NoVDhoaElRb1NDSEFJNlNob3dHRUZCRXBxU2hTbW9sM2RuZkFaeTh6YzdkN2RMd0FQUVU5RXRUMEVRVjFLSGtIM2lIZVZianM1V0xKbHZ6Wjg1dlBuMy84TXl2Q1p2TWRUR0J2ck9UM1hvT1VSMUN0M1B4Nyt1dkIyN09CV2Q0M3F6NUN0ZzlPSXgrWTIxb3lTaGw5MWxUUFg1aDJyTlczMHJxUjVyS2F1eGt5VFRDekhEMUtnbTlkd2w4eXcvU1FSSnRQZng1LytRMWZCMmJwd0F5RlBtSlRwZkwxZXRpdWFuWmNuQ0JEZ1JaRXFBZ2pER3BIOEI1WnpaWmp6RWd0NDRTdy9xOXV6NnV1Uk5mcDkzTmlVZXRqWnFHcXVNVW1qM1RpdUxmZkhvZmt1bVpTQ3NVRm90V2Z6RU5sZkNLVUVmQjAxalhubUp6RlBDZUh2Y0tOQWtQeTczdlNxdlBVdm9LeFVyTitBWVlBZmlxcTV0NWNwL2IrblptblJjZE53aUdPWkpaeDd3TmZSZS9mSUI5Ly92N3oyZTYzelM3aGdVTFJCVHpzQXI2UllpblJVeFFMMllpQ2xhZVdhelZyL1JqVVBMcDZKNGZrNzhNWXBiTzBpSWhxZHErcHVjejU0Y0lwQlFpT3dFdlRuQVBNYU9hZCJ9fQ.B1b4ntqAiWwZESXDi1wfTd0EzAWNNchUr_NM3QEcAzhfMxg-X7i4eNN4H8TP1lFuMI1wxWrAyfs979KDhHOJCyei4bBqqk06uAMLoKqQe03jBf2ZuUsa5KvgNjJsPYzxUa6xO8seKwnxZAvZw7Pk-o8nBHtwKHP3Yqg-YYNkzrtp262UZBSd_YYcKNpaKQxwmSkNeSmtpoy3IqiIROFfkpaansvFs9GxXW4rN_RmPyz6n0ohBg_JXAjPAwLkmY5elZmerll-9FyiX9xk_wBVeQEjfgs8X-eErAI3LNihFxsmC756EF9ZB4OFsKoXlM0yLuAucZQPM4BTPaiFxeJjrQ
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-ratings-navigator/initializeRN:
+    post:
+      tags:
+        - Service
+      summary: initializeRN
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessCaseDoId: '82361'
+                rnOptInFlag: 'Yes'
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: WLCR-User-Token
+          in: header
+          schema:
+            type: string
+          example: >-
+            eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzbTUxNDMzIiwiYWN0aXZlIjp0cnVlLCJpYXQiOjE3NjIxODY5NzEsImV4cCI6MTc2MjI3MzM3MSwianRpIjoiMDg3NGYwYjQtMzljZC00M2U1LTllM2QtNGEzOTg0OTM3ODdjIiwidXNlckluZm8iOnsidXNlcklkIjoic201MTQzMyIsImZ1bGxOYW1lIjoiTWFsbGlrLFNhbmppYiIsImxhc3ROYW1lIjoiTWFsbGlrIiwiZ2VJZCI6IjEwMTE1NTE0MzIiLCJlbWFpbCI6InNhbmppYi5tYWxsaWtAY2l0aS5jb20iLCJlbWJlZEVudGl0bGVtZW50RGF0YSI6ImVOcHRrYjl1RkRFUXhwM2NoVDhoaElRb1NDSEFJNlNob3dHRUZCRXBxU2hTbW9sM2RuZkFaeTh6YzdkN2RMd0FQUVU5RXRUMEVRVjFLSGtIM2lIZVZianM1V0xKbHZ6Wjg1dlBuMy84TXl2Q1p2TWRUR0J2ck9UM1hvT1VSMUN0M1B4Nyt1dkIyN09CV2Q0M3F6NUN0ZzlPSXgrWTIxb3lTaGw5MWxUUFg1aDJyTlczMHJxUjVyS2F1eGt5VFRDekhEMUtnbTlkd2w4eXcvU1FSSnRQZng1LytRMWZCMmJwd0F5RlBtSlRwZkwxZXRpdWFuWmNuQ0JEZ1JaRXFBZ2pER3BIOEI1WnpaWmp6RWd0NDRTdy9xOXV6NnV1Uk5mcDkzTmlVZXRqWnFHcXVNVW1qM1RpdUxmZkhvZmt1bVpTQ3NVRm90V2Z6RU5sZkNLVUVmQjAxalhubUp6RlBDZUh2Y0tOQWtQeTczdlNxdlBVdm9LeFVyTitBWVlBZmlxcTV0NWNwL2IrblptblJjZE53aUdPWkpaeDd3TmZSZS9mSUI5Ly92N3oyZTYzelM3aGdVTFJCVHpzQXI2UllpblJVeFFMMllpQ2xhZVdhelZyL1JqVVBMcDZKNGZrNzhNWXBiTzBpSWhxZHErcHVjejU0Y0lwQlFpT3dFdlRuQVBNYU9hZCJ9fQ.B1b4ntqAiWwZESXDi1wfTd0EzAWNNchUr_NM3QEcAzhfMxg-X7i4eNN4H8TP1lFuMI1wxWrAyfs979KDhHOJCyei4bBqqk06uAMLoKqQe03jBf2ZuUsa5KvgNjJsPYzxUa6xO8seKwnxZAvZw7Pk-o8nBHtwKHP3Yqg-YYNkzrtp262UZBSd_YYcKNpaKQxwmSkNeSmtpoy3IqiIROFfkpaansvFs9GxXW4rN_RmPyz6n0ohBg_JXAjPAwLkmY5elZmerll-9FyiX9xk_wBVeQEjfgs8X-eErAI3LNihFxsmC756EF9ZB4OFsKoXlM0yLuAucZQPM4BTPaiFxeJjrQ
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-ratings-navigator/submitSupportAssessments:
+    post:
+      tags:
+        - Service
+      summary: submitSupportAssessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessCaseDoId: '59670'
+                supportProviderForr: 4+
+                selectedSATAdjustment:
+                  supportProviderName: SUPRAJIT ENGINEERING LTD
+                  supportProviderGfcId: '1004553167'
+                  supportAssessmentClientMeetingDate: 06/30/2025
+                  supportCapacityOutcomeCode: F
+                  supportCapacityOutcomeDesc: Fully Satisfactory
+                  supportWillingnessOutcomeCode: F
+                  supportWillingnessOutcomeDesc: Fully Satisfactory
+                  supportLikelihoodOutcomeCode: F
+                  supportLikelihoodOutcomeDesc: Fully Satisfactory
+                  supportAssessmentDoID: '42739'
+                  supportCappingApplicable: true
+                  independentGfcIdList:
+                    - '1031338235'
+                  assessmentDate: 06/03/2025
+                  dateOfContactWithSupportProvider: 06/30/2025
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: WLCR-User-Token
+          in: header
+          schema:
+            type: string
+          example: >-
+            eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzbTUxNDMzIiwiYWN0aXZlIjp0cnVlLCJpYXQiOjE3NjIxODY5NzEsImV4cCI6MTc2MjI3MzM3MSwianRpIjoiMDg3NGYwYjQtMzljZC00M2U1LTllM2QtNGEzOTg0OTM3ODdjIiwidXNlckluZm8iOnsidXNlcklkIjoic201MTQzMyIsImZ1bGxOYW1lIjoiTWFsbGlrLFNhbmppYiIsImxhc3ROYW1lIjoiTWFsbGlrIiwiZ2VJZCI6IjEwMTE1NTE0MzIiLCJlbWFpbCI6InNhbmppYi5tYWxsaWtAY2l0aS5jb20iLCJlbWJlZEVudGl0bGVtZW50RGF0YSI6ImVOcHRrYjl1RkRFUXhwM2NoVDhoaElRb1NDSEFJNlNob3dHRUZCRXBxU2hTbW9sM2RuZkFaeTh6YzdkN2RMd0FQUVU5RXRUMEVRVjFLSGtIM2lIZVZianM1V0xKbHZ6Wjg1dlBuMy84TXl2Q1p2TWRUR0J2ck9UM1hvT1VSMUN0M1B4Nyt1dkIyN09CV2Q0M3F6NUN0ZzlPSXgrWTIxb3lTaGw5MWxUUFg1aDJyTlczMHJxUjVyS2F1eGt5VFRDekhEMUtnbTlkd2w4eXcvU1FSSnRQZng1LytRMWZCMmJwd0F5RlBtSlRwZkwxZXRpdWFuWmNuQ0JEZ1JaRXFBZ2pER3BIOEI1WnpaWmp6RWd0NDRTdy9xOXV6NnV1Uk5mcDkzTmlVZXRqWnFHcXVNVW1qM1RpdUxmZkhvZmt1bVpTQ3NVRm90V2Z6RU5sZkNLVUVmQjAxalhubUp6RlBDZUh2Y0tOQWtQeTczdlNxdlBVdm9LeFVyTitBWVlBZmlxcTV0NWNwL2IrblptblJjZE53aUdPWkpaeDd3TmZSZS9mSUI5Ly92N3oyZTYzelM3aGdVTFJCVHpzQXI2UllpblJVeFFMMllpQ2xhZVdhelZyL1JqVVBMcDZKNGZrNzhNWXBiTzBpSWhxZHErcHVjejU0Y0lwQlFpT3dFdlRuQVBNYU9hZCJ9fQ.B1b4ntqAiWwZESXDi1wfTd0EzAWNNchUr_NM3QEcAzhfMxg-X7i4eNN4H8TP1lFuMI1wxWrAyfs979KDhHOJCyei4bBqqk06uAMLoKqQe03jBf2ZuUsa5KvgNjJsPYzxUa6xO8seKwnxZAvZw7Pk-o8nBHtwKHP3Yqg-YYNkzrtp262UZBSd_YYcKNpaKQxwmSkNeSmtpoy3IqiIROFfkpaansvFs9GxXW4rN_RmPyz6n0ohBg_JXAjPAwLkmY5elZmerll-9FyiX9xk_wBVeQEjfgs8X-eErAI3LNihFxsmC756EF9ZB4OFsKoXlM0yLuAucZQPM4BTPaiFxeJjrQ
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-ratings-navigator/generateFacilityRiskRating:
+    post:
+      tags:
+        - Service
+      summary: generateFacilityRiskRating local
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessActivityDoId: '1710174'
+                businessCaseId: '121567'
+                facilities:
+                  - businessActivityDoId: '1710174'
+                    riskRatingReviewDoId: '23498'
+                    businessCaseDoId: '121567'
+                    facilityNavigatorDoId: '77523'
+                    obligorNavigatorDoId: '447519'
+                    facilityLongDescription: DAYLIGHT OVERDRAFTS - CASH
+                    tag: CLUSTER
+                    supportType: ''
+                    currentTfa: 250000000
+                    clearingTfa: 250000000
+                    lastApprovedFrr: ''
+                    facilityRatingType: Notching from FORR
+                    cappedFrr: ''
+                    status: Not Started
+                    componentTypeCode: CRID
+                    forr: ''
+                    gfcId: '0000471178'
+                    partyDoID: '116578'
+                    crossBorderFromCountry: ''
+                    crossBorderToCountry: ''
+                    xbrr: ''
+                    clusterFacilityIndicator: true
+                    facilityTypeCode: '99'
+                    frontingFacilityIndicator: false
+                    facilityRatingTypeOptions:
+                      - Notching from FORR
+                      - Manual/ Direct FRR
+                    ownerType: CB
+                    version: 10
+                    proposedComponentIndicator: false
+                    creditLineDoId: '1387690'
+                    orrNavigatorStatus: Not Started
+                    obligorName: ALASKA AIRLINES INC
+                    cagId: '1000280271'
+                    cappingIndicator: false
+                    crossBorderIndicator: 'No'
+                    facilityInscopeIndicator: true
+                    addedFacilityInscopeIndicator: false
+                    obligorInscopeIndicator: false
+                    obligorLastApprovedForr: 5-
+                    facilityClassification: Substandard
+                    performingStatus: PERFORMING
+                    componentId: US581866-6
+                    rfrr: ''
+                    frr: ''
+                    tagArray:
+                      - CLUSTER
+      parameters:
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: WLCR-User-Token
+          in: header
+          schema:
+            type: string
+          example: >-
+            eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzbTUxNDMzIiwiYWN0aXZlIjp0cnVlLCJpYXQiOjE3NjIxODY5NzEsImV4cCI6MTc2MjI3MzM3MSwianRpIjoiMDg3NGYwYjQtMzljZC00M2U1LTllM2QtNGEzOTg0OTM3ODdjIiwidXNlckluZm8iOnsidXNlcklkIjoic201MTQzMyIsImZ1bGxOYW1lIjoiTWFsbGlrLFNhbmppYiIsImxhc3ROYW1lIjoiTWFsbGlrIiwiZ2VJZCI6IjEwMTE1NTE0MzIiLCJlbWFpbCI6InNhbmppYi5tYWxsaWtAY2l0aS5jb20iLCJlbWJlZEVudGl0bGVtZW50RGF0YSI6ImVOcHRrYjl1RkRFUXhwM2NoVDhoaElRb1NDSEFJNlNob3dHRUZCRXBxU2hTbW9sM2RuZkFaeTh6YzdkN2RMd0FQUVU5RXRUMEVRVjFLSGtIM2lIZVZianM1V0xKbHZ6Wjg1dlBuMy84TXl2Q1p2TWRUR0J2ck9UM1hvT1VSMUN0M1B4Nyt1dkIyN09CV2Q0M3F6NUN0ZzlPSXgrWTIxb3lTaGw5MWxUUFg1aDJyTlczMHJxUjVyS2F1eGt5VFRDekhEMUtnbTlkd2w4eXcvU1FSSnRQZng1LytRMWZCMmJwd0F5RlBtSlRwZkwxZXRpdWFuWmNuQ0JEZ1JaRXFBZ2pER3BIOEI1WnpaWmp6RWd0NDRTdy9xOXV6NnV1Uk5mcDkzTmlVZXRqWnFHcXVNVW1qM1RpdUxmZkhvZmt1bVpTQ3NVRm90V2Z6RU5sZkNLVUVmQjAxalhubUp6RlBDZUh2Y0tOQWtQeTczdlNxdlBVdm9LeFVyTitBWVlBZmlxcTV0NWNwL2IrblptblJjZE53aUdPWkpaeDd3TmZSZS9mSUI5Ly92N3oyZTYzelM3aGdVTFJCVHpzQXI2UllpblJVeFFMMllpQ2xhZVdhelZyL1JqVVBMcDZKNGZrNzhNWXBiTzBpSWhxZHErcHVjejU0Y0lwQlFpT3dFdlRuQVBNYU9hZCJ9fQ.B1b4ntqAiWwZESXDi1wfTd0EzAWNNchUr_NM3QEcAzhfMxg-X7i4eNN4H8TP1lFuMI1wxWrAyfs979KDhHOJCyei4bBqqk06uAMLoKqQe03jBf2ZuUsa5KvgNjJsPYzxUa6xO8seKwnxZAvZw7Pk-o8nBHtwKHP3Yqg-YYNkzrtp262UZBSd_YYcKNpaKQxwmSkNeSmtpoy3IqiIROFfkpaansvFs9GxXW4rN_RmPyz6n0ohBg_JXAjPAwLkmY5elZmerll-9FyiX9xk_wBVeQEjfgs8X-eErAI3LNihFxsmC756EF9ZB4OFsKoXlM0yLuAucZQPM4BTPaiFxeJjrQ
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /LGDCalculator/lgdfrrservice:
+    post:
+      tags:
+        - LGD
+      summary: UAT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              example: '{}'
+      parameters:
+        - name: authenticationToken
+          in: header
+          schema:
+            type: string
+          example: IhIXj5oV
+        - name: content-Type
+          in: header
+          schema:
+            type: string
+          example: text/xml
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /saveQuestionnaire:
+    post:
+      tags:
+        - Questionare
+      summary: saveQuestionare?SM_USER=rc56494 Copy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                entryControlBusinessActivityDOId: '10021'
+                businessCaseDOId: '10006'
+                questionnaireTemplateVersionNumber: 1
+                questionnaireTemplateName: Ratings Navigator Entry Control
+                questionnaireTemplateID: 1
+                checkListResponses:
+                  - sectionCode: Scope-RNec
+                    sectionName: Scope-RNec
+                    sectionSequenceNumber: '1'
+                    questionCode: 60000100.1.Q1
+                    questionText: >-
+                      1. Is there any Obligors and/or Facilities in scope of
+                      current credit review which doesn''t belong to CCB?
+                    questionSequenceNumber: '1'
+                    inputTypeCode: SINGLESELECTRAD
+                    inputValueText: 'No'
+                    referenceDataConceptName: ''
+                    referenceDataSelectOptionCode: 'N'
+                    referenceDataSelectOptionDescription: ''
+                    referenceDataSelectSetCode: ''
+                    referenceDataSelectSetVersionNumber: '1'
+                  - sectionCode: Ratings-Assessment-RNec
+                    sectionName: Ratings-Assessment-RNec
+                    sectionSequenceNumber: '2'
+                    questionCode: 60000100.2.Q1
+                    questionText: >-
+                      1. Are any obligors in the Credit Review: Govt Related
+                      Entities, Branch obligors (not subsidiaries, typically
+                      common in Bank portfolios), Credit Programs, WAPD, and/or
+                      Economic Entities?
+                    questionSequenceNumber: '2'
+                    inputTypeCode: SINGLESELECTRAD
+                    inputValueText: 'No'
+                    referenceDataConceptName: ''
+                    referenceDataSelectOptionCode: 'N'
+                    referenceDataSelectOptionDescription: ''
+                    referenceDataSelectSetCode: ''
+                    referenceDataSelectSetVersionNumber: '1'
+                  - sectionCode: Ratings-Assessment-RNec
+                    sectionName: Ratings-Assessment-RNec
+                    sectionSequenceNumber: '3'
+                    questionCode: 60000100.2.Q2
+                    questionText: >-
+                      2. Are there any Obligors and/or Facilities with WUBIG or
+                      LTFS as Support Types?
+                    questionSequenceNumber: '3'
+                    inputTypeCode: SINGLESELECTRAD
+                    inputValueText: 'No'
+                    referenceDataConceptName: ''
+                    referenceDataSelectOptionCode: 'N'
+                    referenceDataSelectOptionDescription: ''
+                    referenceDataSelectSetCode: ''
+                    referenceDataSelectSetVersionNumber: '1'
+                  - sectionCode: Ratings-Assessment-RNec
+                    sectionName: Ratings-Assessment-RNec
+                    sectionSequenceNumber: '4'
+                    questionCode: 60000100.2.Q3
+                    questionText: >-
+                      3. Are there any Obligors and/or Facilities with a
+                      Classification as Loss, Default, Substandard, and/or
+                      Special Mention?
+                    questionSequenceNumber: '4'
+                    inputTypeCode: SINGLESELECTRAD
+                    inputValueText: 'No'
+                    referenceDataConceptName: ''
+                    referenceDataSelectOptionCode: 'N'
+                    referenceDataSelectOptionDescription: ''
+                    referenceDataSelectSetCode: ''
+                    referenceDataSelectSetVersionNumber: '1'
+                  - sectionCode: Ratings-Assessment-RNec
+                    sectionName: Ratings-Assessment-RNec
+                    sectionSequenceNumber: '5'
+                    questionCode: 60000100.2.Q4
+                    questionText: >-
+                      4. Are there any obligors using any Risk Rating
+                      methodologies outside of Debt Ratings Models, Scorecard
+                      Models, or Subsidiary Rated processes?
+                    questionSequenceNumber: '5'
+                    inputTypeCode: SINGLESELECTRAD
+                    inputValueText: 'No'
+                    referenceDataConceptName: ''
+                    referenceDataSelectOptionCode: 'N'
+                    referenceDataSelectOptionDescription: ''
+                    referenceDataSelectSetCode: ''
+                    referenceDataSelectSetVersionNumber: '1'
+                  - sectionCode: Ratings-Assessment-RNec
+                    sectionName: Ratings-Assessment-RNec
+                    sectionSequenceNumber: '6'
+                    questionCode: 60000100.2.Q5
+                    questionText: >-
+                      5. Are there any facilities with Fronting risk, Cross
+                      Border risk and/or part of a Cluster(s)?
+                    questionSequenceNumber: '6'
+                    inputTypeCode: SINGLESELECTRAD
+                    inputValueText: 'No'
+                    referenceDataConceptName: ''
+                    referenceDataSelectOptionCode: 'N'
+                    referenceDataSelectOptionDescription: ''
+                    referenceDataSelectSetCode: ''
+                    referenceDataSelectSetVersionNumber: '1'
+                  - sectionCode: Ratings-Assessment-RNec
+                    sectionName: Ratings-Assessment-RNec
+                    sectionSequenceNumber: '7'
+                    questionCode: 60000100.2.Q6
+                    questionText: >-
+                      6. Are there any facilities with Fronting risk, Cross
+                      Border risk and/or part of a Cluster(s)?
+                    questionSequenceNumber: '7'
+                    inputTypeCode: SINGLESELECTRAD
+                    inputValueText: 'No'
+                    referenceDataConceptName: ''
+                    referenceDataSelectOptionCode: 'N'
+                    referenceDataSelectOptionDescription: ''
+                    referenceDataSelectSetCode: ''
+                    referenceDataSelectSetVersionNumber: '1'
+      parameters:
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: rc56494
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /isEligibleForRN:
+    get:
+      tags:
+        - Questionare
+      summary: isEligibleForRN local
+      parameters:
+        - name: caseId
+          in: query
+          schema:
+            type: integer
+          example: '27387'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/financial/helios-fa-service/getTemplateAnswerDetails:
+    post:
+      tags:
+        - Questionare
+      summary: getTemplateAnswerDetails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                templateId: 60000100
+      parameters:
+        - name: WLCR-User-Token
+          in: header
+          schema:
+            type: string
+          example: >-
+            eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJkYTQ1Nzk4IiwiYWN0aXZlIjp0cnVlLCJpYXQiOjE3NDg5NDkxMzIsImV4cCI6MTc0OTAzNTUzMiwianRpIjoiYjRlNDQzZDQtMjc1NC00ZjUwLWE1ZGQtMWM5MGExZDQzODBlIiwidXNlckluZm8iOnsidXNlcklkIjoiZGE0NTc5OCIsImZ1bGxOYW1lIjoiQW5hbGRhcyxEaWxpcCIsImxhc3ROYW1lIjoiQW5hbGRhcyIsImdlSWQiOiIxMDExMTQ1Nzk4IiwiZW1haWwiOiJkaWxpcC5hbmFsZGFzQGNpdGkuY29tIiwiZW1iZWRFbnRpdGxlbWVudERhdGEiOiJlTnBWa0w5S0EwRVFoemYvMElRSWlTR0NpRDVDSHNCR1JRZ0d0TEt3UERlM2MzZWptOXRqZG5KM3NmTUY3QzNzQmEzdHhjSmFTOS9CZDNEdjBIaFoySUg5WUg3NzQzditGaTFMb244bFV6bWFNK3JSaWJUUm1VeGFhMSt2YjF1WEh3MVJINHVPTmxLTnBjK0dKcUxORVlHTmpGWjVjbkFvaXRQTjF0M3N1VnRuc2FHQU1BWGxrZEZnWGZqZ1AveUlTQzVPMFhKKys3bDcveTRmR3FJMkVVMkxONUFuYnIyZE5ZdkpZdHMzS1pBTXdaUFdZaGpQSUdadkpxK0JXQXg4QW9Yc0VhUUkyUjhkcmxJL0FyL2ttd0dTWlU4YjVja2tvU0xXZGNTcFQ1WDNjQjY3MWhraFl4eitSaFI4YnpYVXpxY1dGVXBhTEg4TnlMaG1KZ2pRaDhwaUw0VFk5ZGRMbExQb0FNenMwa3BGK2JIUitoem80dTdwWlgvbnNWODZhYkFNU3lYTlVrbU5SYmZhTWM5L0FNZ3psOTQ9In19.ILGTmTEhQDWv8anBzsdfr83TU3KKPDVFemKdxkfGl4cH7VrnMXkCrwv0CuHJXvsKa-6GE7Ctwhv4QjkFMHW9wpRUEnvymWHrdj1snnLFNn_lwwi2GN8lg1hx1uZ24N56bs0kwwU-NnNXd1ep4U3Jkwq1bPk2TVmUtC2PO0xHR3YuWlfOfP7NuJ_lN5jAJcKxXwCOu6P5YlmA1MYXTDLDG57R3auXOpglppEVIi79TMN81YaIWQv_48DrLeTVLEIwnJ8yWmZCsUNp2ifXyjEfDqxVNfUEl3Uf4t6IlxHc2LDPfVzd0ELIr2SkqZgaoopmO8CpYW3QHhM_tgpm31IgbQ\
+        - name: X-Xsrf-Token
+          in: header
+          schema:
+            type: string
+          example: b27efda87d32824e252c57afc3e8dd95e0f03f6809e6a4147ba9c871f0f8e570
+        - name: SM_USER
+          in: query
+          schema:
+            type: string
+          example: kk33354
+        - name: ''
+          in: query
+          schema:
+            type: string
+        - name: ''
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/line/composite/api/v1/clComposite/creditLinesForCaseId:
+    get:
+      tags:
+        - Collateral
+      summary: CreditLine
+      parameters:
+        - name: caseId
+          in: query
+          schema:
+            type: integer
+          example: '51346'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/collateral/composite-api/api/v1/collateral/assetAllocationByCreditLine:
+    post:
+      tags:
+        - Collateral
+      summary: Collateral with CRDO
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessCaseId: '50484'
+                creditLineDoIDs:
+                  - '1308783'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/composite-api/api/v1/collateral/assetAllocationByCreditLine:
+    post:
+      tags:
+        - Collateral
+      summary: Collateral Old
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                businessCaseId: '50484'
+                creditLineDoIDs:
+                  - '1308783'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fo/lds/ref-data-loader/api/v1/exchange/rate/get/latest:
+    post:
+      tags:
+        - Collateral
+      summary: ExchangeRate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - businessKeyMap:
+                    FromCurrencyCode: EUR
+                    ToCurrencyCode: USD
+                - businessKeyMap:
+                    FromCurrencyCode: INR
+                    ToCurrencyCode: USD
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/lfm/composite-service/api/v2/legacyFmFacility/expCollateralDetailsForGfrnAndExpCollIds:
+    get:
+      tags:
+        - Collateral
+      summary: Expected Collateral
+      parameters:
+        - name: gfrn
+          in: query
+          schema:
+            type: string
+          example: AR2593126-1
+        - name: expCollIds
+          in: query
+          schema:
+            type: string
+          example: 10316141,10316141,10316141
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/review/cam-service/credit-review/casemanagement/v2.0/review/release:
+    post:
+      tags:
+        - Case unlock
+      summary: release
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                userId: MS80119
+                workflowId: '1120618'
+                workflowProcessName: ExistingClientRequest
+                activityName: riskRatingsAndClassification
+                activityId: '1710174'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fs/review/assessments-composite/assessments/composite/api/v1/supportAssessment/findSupportAssessmentRNByGfcId:
+    post:
+      tags:
+        - SAT
+      summary: SuppotAdj
+      requestBody:
+        content: {}
+      parameters:
+        - name: receiverGfcId
+          in: query
+          schema:
+            type: integer
+          example: '1003176483'
+        - name: providerGfcId
+          in: query
+          schema:
+            type: integer
+          example: '0000611042'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /oauth2/token:
+    post:
+      tags:
+        - General
+      summary: Get Token
+      requestBody:
+        content: {}
+      parameters:
+        - name: grant_type
+          in: query
+          schema:
+            type: string
+          example: client_credentials
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
